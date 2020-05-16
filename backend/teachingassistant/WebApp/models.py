@@ -49,22 +49,6 @@ class StudentForm(forms.ModelForm):
             'name', 'discord_name', 'assignments'
         )
 
-class StringField(models.Model):
-    word = models.CharField(max_length=50)
-    assigned_by = models.EmbeddedField(
-        model_container=Student,
-        model_form_class=StudentForm
-    )
-    class Meta:
-        abstract = True
-
-class StringFieldForm(forms.ModelForm):
-    class Meta:
-        model = StringField
-        fields = (
-            'word', 'assigned_by'
-        )
-
 class AStudent(models.Model):
     name = models.CharField(max_length=100)
     discord_name = models.CharField(max_length=100)
@@ -77,6 +61,36 @@ class AStudentForm(forms.ModelForm):
         model = AStudent
         fields = (
             'name', 'discord_name'
+        )
+
+class Teacher(models.Model):
+    name = models.CharField(max_length=100)
+    discord_name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    class Meta:
+        abstract = True
+
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = AStudent
+        fields = (
+            'name', 'discord_name', 'email'
+        )
+
+class StringField(models.Model):
+    word = models.CharField(max_length=50)
+    assigned_by = models.EmbeddedField(
+        model_container=AStudent,
+        model_form_class=AStudentForm
+    )
+    class Meta:
+        abstract = True
+
+class StringFieldForm(forms.ModelForm):
+    class Meta:
+        model = StringField
+        fields = (
+            'word', 'assigned_by'
         )
 
 class AttendanceEntry(models.Model):
@@ -124,8 +138,8 @@ class AttendanceForm(forms.ModelForm):
 
 class Classroom(models.Model):
     teacher = models.EmbeddedField(
-        model_container=Student,
-        model_form_class=StudentForm
+        model_container=Teacher,
+        model_form_class=TeacherForm
     )
 
     students = models.ArrayField(
