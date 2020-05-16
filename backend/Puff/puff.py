@@ -5,6 +5,7 @@ import random
 from discord.ext import commands
 from dotenv import load_dotenv
 from pathlib import Path
+from datetime import datetime
 
 target = "10"
 swearWords = ['temporary']
@@ -31,6 +32,8 @@ async def on_message(message):
         return
 
     if any(swear in message.content for swear in swearWords):
+        channel = bot.get_channel(711089932256542721)
+        await channel.send(message.author.name + " (" + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
         await message.delete()
         response = "Please, do not use vulgar language.\nಠ_ಠ"
         await message.channel.send(response)
