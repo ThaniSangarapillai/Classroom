@@ -1,1 +1,17 @@
-<sb-layout-dashboard><sb-dashboard-head title="Your Classroom" [hideBreadcrumbs]="false"></sb-dashboard-head><sb-dashboard-cards></sb-dashboard-cards><sb-dashboard-tables></sb-dashboard-tables></sb-layout-dashboard>
+<sb-layout-dashboard>
+    <sb-dashboard-head title="Your Classroom" [hideBreadcrumbs]="false">
+
+    </sb-dashboard-head>
+    <sb-dashboard-cards>
+
+    </sb-dashboard-cards>
+    <sb-dashboard-tables>
+
+    </sb-dashboard-tables>
+    <button (click)="getPosts()">Get Posts
+
+    </button>
+    <div *ngFor="let post of posts | async">
+        {{ post | json }}
+    </div>
+</sb-layout-dashboard>
