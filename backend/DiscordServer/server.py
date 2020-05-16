@@ -2,7 +2,7 @@
 import os
 import re
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import time
 import random
@@ -18,6 +18,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 bot = commands.Bot(command_prefix="!")
+
+channel_reminders = 711102253800620073
 
 # state
 attendance_flag = False
@@ -85,20 +87,54 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+@bot.command(name="currentreminders")
+async def currentreminders(ctx, *args):
+    text = ""
+    i = 0
+
+    for reminder in reminders:
+        (datetime, message) = reminder
+        text += str(i) + ":"
+        text += " " + str(datetime)
+        text += " " + "\"" + message + "\""
+        text += "\n"
+        i += 1
+
+    await ctx.send(text)
+
 @bot.command(name='reminder')
 async def reminder(ctx, *args):
     try:
         time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
         print(time)
-        print(type(time))
 
-        await ctx.send(str(time))
+        global reminders
+        reminders += [(time, args[2])]
+        await ctx.send("A reminder has been added.")
     except:
-        usage_text = "Usage:\nreminder dd/mm/yyyy xx:yy \"message\""
+        usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
         await ctx.send(usage_text)
         return
 
+@bot.command(name='removereminder')
+async def removereminder(ctx, *args):
+    try:
+        index = int(args[0])
+        global reminders
+        toremove = reminders[index]
+        reminders.pop(index)
 
+        (datetime, message) = toremove
+        text = str(index) + ":"
+        text += " " + str(datetime)
+        text += " " + "\"" + message + "\""
+        text += "\n"
+        print("REMOVED " + text)
+        await ctx.send("removed the following reminder:\n" + text)
+    except:
+        usage_text = "Usage:\n!removereminder index"
+        await ctx.send(usage_text)
+        return
 
 @bot.event
 async def on_message(message):
@@ -126,6 +162,29 @@ def findWholeWord(w, input_str):
     return re.match(r'\b({0})\b'.format(w), input_str)
     #pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
+@tasks.loop(seconds=1)
+async def once_a_second():
+    # check reminders
+    global reminders
+    currentdatetime = datetime.datetime.now()
+    remove_reminders = []
 
+    for reminder in reminders:
+        (reminderdatetime, message) = reminder
 
+        if reminderdatetime <= currentdatetime:
+            print("Reminder! " + message)
+            remove_reminders += [reminder]
+            channel = bot.get_channel(channel_reminders)
+            await channel.send(message)
+
+    reminders = [r for r in reminders if r not in remove_reminders]
+
+    print(reminders)
+
+@once_a_second.before_loop
+async def before_once_a_second():
+    await bot.wait_until_ready()
+
+once_a_second.start()
 bot.run(TOKEN)
