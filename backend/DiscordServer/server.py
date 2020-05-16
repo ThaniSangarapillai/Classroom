@@ -64,12 +64,11 @@ async def getRole(guild, name, colour=0x1fff7c):
         return role
 
 
-async def getChannel(guild, name):
-    print(name, type(name))
+async def getChannel(guild, name, overwrites=None):
     name = name.lower()
     channel = get(guild.channels, name=name)
     if channel is None:
-        return await guild.create_text_channel(name=name)
+        return await guild.create_text_channel(name=name, overwrites=overwrites)
     else:
         return channel
 
@@ -92,13 +91,27 @@ async def setup(ctx, *args):
     await getRole(guild, Roles.TEACHER.value, 0xff4af9)
     await getRole(guild, Roles.TA.value, 0x3bffef)
     await getChannel(guild, TextChannels.REMINDERS.value)
-    await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value)
+
+    student_role = get(guild.roles, name=Roles.STUDENT.value)
+    teacher_role = get(guild.roles, name=Roles.TEACHER.value)
+    admin_role = get(guild.roles, name="Admin")
+    overwrites_teachers_lounge = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        student_role: discord.PermissionOverwrite(read_messages=False),
+        teacher_role: discord.PermissionOverwrite(read_messages=True),
+        admin_role: discord.PermissionOverwrite(read_messages=True)
+    }
+
+    # await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value, overwrites_teachers_lounge)
+    await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value, overwrites_teachers_lounge)
+
 
     global discord_name, email, user, password
     # try:
     if args[0] == None:
         await ctx.send("Please enter the email address associated with your account to link your account.")
-    elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", args[0]):
+    elif not re.match("^[a-zA-Z0-9.]+@[a-zA-Z]+.[a-z]+$", args[0]):
+        print("regecx error")
         await ctx.send("Please enter the email address associated with your account to link your account.")
     else:
         url = 'http://34.125.57.52/verify/'
@@ -358,9 +371,7 @@ async def on_message(message):
             await message.channel.send("Duplicate user.")
 
     messageWords = message.content.split()
-    print(messageWords)
     if any(word in messageWords for word in swearWords):
-        print("bad")
         channel = await getChannel(message.guild, TextChannels.TEACHERS_LOUNGE.value)
         await channel.send(message.author.name + " (" + datetime.datetime.now().strftime(
             "%d/%m/%Y %H:%M:%S") + "): " + message.content)
