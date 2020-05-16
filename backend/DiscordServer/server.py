@@ -13,12 +13,29 @@ import ast
 import asyncio
 import time
 import datetime
+from datetime import datetime
+import json
+from pathlib import Path
+from enum import Enum
+#from ..teachingassistant.WebApp import models
+
+# all required roles that should be present at all times go here
+class Roles(Enum):
+    TEACHER = "Teacher"
+    TA = "TA"
+    STUDENT = "Student"
+
+# all required text channels that should be present at all times go here
+class TextChannels(Enum):
+    REMINDERS = "reminders"
+    TEACHERS_LOUNGE = "teachers-lounge"
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 bot = commands.Bot(command_prefix="!")
+
 
 channel_reminders = 711102253800620073
 student_roleid = 711143892304527360
@@ -31,7 +48,44 @@ reminders = []
 
 groups = []
 
-@bot.command(name="initialize")
+swearWords = []
+
+async def getRole(guild, name, colour=0x1fff7c):
+    role = get(guild.roles, name=name)
+    if role is None:
+        return await guild.create_role(name=name, colour=discord.Colour(colour))
+    else:
+        return role
+
+async def getChannel(guild, name):
+    print(name, type(name))
+    name = name.lower()
+    channel = get(guild.channels, name=name)
+    if channel is None:
+        return await guild.create_text_channel(name=name)
+    else:
+        return channel
+
+async def getMembersOfRole(guild, role_name):
+    role = await getRole(guild, role_name)
+
+    members = []
+    for member in guild.members:
+        if role in member.roles:
+            members += [member]
+
+    return members
+
+@bot.command(name="setup")
+async def setup(ctx, *args):
+    guild = ctx.guild
+    await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
+    await getRole(guild, Roles.TEACHER.value, 0xff4af9)
+    await getRole(guild, Roles.TA.value, 0x3bffef)
+    await getChannel(guild, TextChannels.REMINDERS.value)
+    await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value)
+
+=@bot.command(name="initialize")
 async def initialize(ctx, *arg):
     try:
         if arg[0] == None:
@@ -146,9 +200,10 @@ async def group(ctx, *args):
 
     mode = args[0]
 
-    if mode == "create":
+    if mode == "dcreate":
+        print("creating groups.")
         num_groups = int(args[1])
-        basename = args[2]
+        basename = args[2] if len(args) >= 3 else "group"
 
         guild = ctx.message.guild
         for i in range(num_groups):
@@ -160,24 +215,21 @@ async def group(ctx, *args):
             }
             channel = await guild.create_text_channel(basename + "-" + str(i), overwrites=overwrites)
             groups.append(channel)
-    elif mode == "list":
+    elif mode == "dlist":
         text = "Active groups:\n"
         for (i, channel) in enumerate(groups):
             text += str(i) + ": " + str(channel) + "\n"
 
         await ctx.send(text)
-    elif mode == "removeall":
+    elif mode == "dremoveall":
         for channel in groups:
             await channel.delete()
 
         groups = []
-    elif mode == "assignall":
+    elif mode == "distributeall":
         guild = ctx.message.guild
 
-        students = guild.get_role(711143892304527360).members
-        print(students)
-
-        print(groups)
+        students = await getMembersOfRole(guild, Roles.STUDENT.value)
 
         per_group = len(students) // len(groups)
         remainder = len(students) % len(groups)
@@ -212,6 +264,13 @@ async def on_message(message):
         else:
             await message.channel.send("Duplicate user.")
 
+    if any(swear in message.content for swear in swearWords):
+        channel = await getChannel(message.guild, TextChannels.TEACHERS_LOUNGE.value)
+        await channel.send(message.author.name + " (" + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
+        await message.delete()
+        response = "Please, do not use vulgar language.\nಠ_ಠ"
+        await message.channel.send(response)
+
     try:
         await bot.process_commands(message)
     except:
@@ -240,6 +299,7 @@ async def once_a_second():
             print("Reminder! " + message)
             remove_reminders += [reminder]
             channel = bot.get_channel(channel_reminders)
+            # channel = await getChannel(, TextChannels.REMINDERS.value)
             await channel.send(message)
 
     reminders = [r for r in reminders if r not in remove_reminders]
