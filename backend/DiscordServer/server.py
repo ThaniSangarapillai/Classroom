@@ -2,7 +2,8 @@
 import os
 import re
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+from discord.utils import get
 from dotenv import load_dotenv
 import time
 import random
@@ -24,11 +25,16 @@ classroom_obj = None
 
 bot = commands.Bot(command_prefix="!")
 
+channel_reminders = 711102253800620073
+student_roleid = 711143892304527360
+
 # state
 attendance_flag = False
 attendance_heres = []
 
 reminders = []
+
+groups = []
 
 @bot.command(name="initialize")
 async def initialize(ctx, *arg):
@@ -95,18 +101,112 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+@bot.command(name="currentreminders")
+async def currentreminders(ctx, *args):
+    text = ""
+    i = 0
+
+    for reminder in reminders:
+        (datetime, message) = reminder
+        text += str(i) + ":"
+        text += " " + str(datetime)
+        text += " " + "\"" + message + "\""
+        text += "\n"
+        i += 1
+
+    await ctx.send(text)
+
 @bot.command(name='reminder')
 async def reminder(ctx, *args):
     try:
         time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
         print(time)
-        print(type(time))
 
-        await ctx.send(str(time))
+        global reminders
+        reminders += [(time, args[2])]
+        await ctx.send("A reminder has been added.")
     except:
-        usage_text = "Usage:\nreminder dd/mm/yyyy xx:yy \"message\""
+        usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
         await ctx.send(usage_text)
         return
+
+@bot.command(name='removereminder')
+async def removereminder(ctx, *args):
+    try:
+        index = int(args[0])
+        global reminders
+        toremove = reminders[index]
+        reminders.pop(index)
+
+        (datetime, message) = toremove
+        text = str(index) + ":"
+        text += " " + str(datetime)
+        text += " " + "\"" + message + "\""
+        text += "\n"
+        print("REMOVED " + text)
+        await ctx.send("removed the following reminder:\n" + text)
+    except:
+        usage_text = "Usage:\n!removereminder index"
+        await ctx.send(usage_text)
+        return
+
+@bot.command(name='group')
+async def group(ctx, *args):
+    global groups
+
+    mode = args[0]
+
+    if mode == "create":
+        num_groups = int(args[1])
+        basename = args[2]
+
+        guild = ctx.message.guild
+        for i in range(num_groups):
+            admin_role = get(guild.roles, name="Admin")
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                guild.me: discord.PermissionOverwrite(read_messages=True),
+                admin_role: discord.PermissionOverwrite(read_messages=True)
+            }
+            channel = await guild.create_text_channel(basename + "-" + str(i), overwrites=overwrites)
+            groups.append(channel)
+    elif mode == "list":
+        text = "Active groups:\n"
+        for (i, channel) in enumerate(groups):
+            text += str(i) + ": " + str(channel) + "\n"
+
+        await ctx.send(text)
+    elif mode == "removeall":
+        for channel in groups:
+            await channel.delete()
+
+        groups = []
+    elif mode == "assignall":
+        guild = ctx.message.guild
+
+        students = guild.get_role(711143892304527360).members
+        print(students)
+
+        print(groups)
+
+        per_group = len(students) // len(groups)
+        remainder = len(students) % len(groups)
+
+        for (groupnumber, group) in enumerate(groups):
+            total = per_group + 1 if groupnumber < remainder else per_group
+
+            for i in range(total):
+                # add student
+                student = students.pop()
+                print("add " + str(student) + " to " + str(group))
+                await group.set_permissions(student, read_messages=True, send_messages=True)
+    elif mode == "move":
+        # student = get_member_named(args[1])
+        # group = groups[int(args[2])] // TODO STILL NEED TO REMOVE STUDENT FROM PREVIOUS GROUP.
+        #
+        # await group.set_permissions(student, read_messages=True, send_messages=True)
+
+        pass
 
 
 
@@ -136,6 +236,28 @@ def findWholeWord(w, input_str):
     return re.match(r'\b({0})\b'.format(w), input_str)
     #pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
+@tasks.loop(seconds=1)
+async def once_a_second():
+    # check reminders
+    global reminders
+    currentdatetime = datetime.datetime.now()
+    remove_reminders = []
 
+    for reminder in reminders:
+        (reminderdatetime, message) = reminder
+
+        if reminderdatetime <= currentdatetime:
+            print("Reminder! " + message)
+            remove_reminders += [reminder]
+            channel = bot.get_channel(channel_reminders)
+            await channel.send(message)
+
+    reminders = [r for r in reminders if r not in remove_reminders]
+
+@once_a_second.before_loop
+async def before_once_a_second():
+    await bot.wait_until_ready()
+
+once_a_second.start()
 bot.run(TOKEN)
 
