@@ -14,8 +14,9 @@ import asyncio
 import time
 import json
 from pathlib import Path
-#from ..teachingassistant.WebApp import models
+# from ..teachingassistant.WebApp import models
 from enum import Enum
+
 
 # all required roles that should be present at all times go here
 class Roles(Enum):
@@ -23,10 +24,12 @@ class Roles(Enum):
     TA = "TA"
     STUDENT = "Student"
 
+
 # all required text channels that should be present at all times go here
 class TextChannels(Enum):
     REMINDERS = "reminders"
     TEACHERS_LOUNGE = "teachers-lounge"
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -60,6 +63,7 @@ async def getRole(guild, name, colour=0x1fff7c):
     else:
         return role
 
+
 async def getChannel(guild, name):
     print(name, type(name))
     name = name.lower()
@@ -68,6 +72,7 @@ async def getChannel(guild, name):
         return await guild.create_text_channel(name=name)
     else:
         return channel
+
 
 async def getMembersOfRole(guild, role_name):
     role = await getRole(guild, role_name)
@@ -79,6 +84,7 @@ async def getMembersOfRole(guild, role_name):
 
     return members
 
+
 @bot.command(name="setup")
 async def setup(ctx, *args):
     guild = ctx.guild
@@ -88,28 +94,29 @@ async def setup(ctx, *args):
     await getChannel(guild, TextChannels.REMINDERS.value)
     await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value)
 
+
 @bot.command(name="initialize")
 async def initialize(ctx, *arg):
     global discord_name, email, user, password
-    try:
-        if arg[0] == None:
-            await ctx.send("Please enter the email address associated with your account to link your account.")
-        elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
-            await ctx.send("Please enter the email address associated with your account to link your account.")
-        else:
-            url = 'https://djangobackend-276109.df.r.appspot.com/verify/'
-            myobj = [{'discord_name': 'Thani4847'}]
-            headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]},
-                              auth=(user, password), headers=headers)
-            classroom_obj = x.json()[0]
-            discord_name = str(ctx.message.author)
-            email = arg[0]
-            print(classroom_obj)
-            setSwearWordList()
-    except Exception as e:
-        print(e)
+    # try:
+    if arg[0] == None:
         await ctx.send("Please enter the email address associated with your account to link your account.")
+    elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
+        await ctx.send("Please enter the email address associated with your account to link your account.")
+    else:
+        url = 'http://34.125.57.52/verify/'
+        myobj = [{'discord_name': 'Thani4847'}]
+        headers = {'content-type': 'application/json'}
+        x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]},
+                          auth=(user, password), headers=headers)
+        classroom_obj = x.json()[0]
+        discord_name = str(ctx.message.author)
+        email = arg[0]
+        print(classroom_obj)
+        setSwearWordList()
+# except Exception as e:
+#     print(e)
+#     await ctx.send("Please enter the email address associated with your account to link your account.")
 
 
 @bot.command(name='mute')
@@ -279,43 +286,48 @@ async def group(ctx, *args):
 
         pass
 
+
 @bot.command(name='filter')
-#@commands.has_role('Teacher')
-async def filter(ctx,paramOne,word):
+# @commands.has_role('Teacher')
+async def filter(ctx, paramOne, word):
     global swearWords
     if (paramOne.lower() == "add"):
         if (word in swearWords):
             response = "This word is already being filtered."
         else:
-            url = 'https://djangobackend-276109.df.r.appspot.com/add/word/'
-            headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word":{"word": word}},
-                              auth=(user, password), headers=headers)
-            swearWords = []
-            for y in x.json():
-
-                swearWords.append(y["word"])
-            response = "This word has now been added to the filter."
-    elif (paramOne.lower() == "remove"):
-        if (word in swearWords):
-            url = 'https://djangobackend-276109.df.r.appspot.com/add/word/'
+            url = 'http://34.125.57.52/add/word/'
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
                               auth=(user, password), headers=headers)
             swearWords = []
+            print(x.json())
             for y in x.json():
-
                 swearWords.append(y["word"])
+            print(swearWords)
+            response = "This word has now been added to the filter."
+    elif (paramOne.lower() == "remove"):
+        if (word in swearWords):
+            url = 'http://34.125.57.52/add/word/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
+                              auth=(user, password), headers=headers)
+            swearWords = []
+            print(x.json())
+            for y in x.json():
+                swearWords.append(y["word"])
+            print(swearWords)
             response = "This word has been removed from the filer."
         else:
             response = "This word is not part of the filter."
 
     await ctx.send(response)
 
+
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.CheckFailure):
         await ctx.send("Sorry, only the teacher can use that command.\n¯\_(ツ)_/¯")
+
 
 @bot.event
 async def on_message(message):
@@ -334,7 +346,8 @@ async def on_message(message):
     if any(word in messageWords for word in swearWords):
         print("bad")
         channel = await getChannel(message.guild, TextChannels.TEACHERS_LOUNGE.value)
-        await channel.send(message.author.name + " (" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
+        await channel.send(message.author.name + " (" + datetime.datetime.now().strftime(
+            "%d/%m/%Y %H:%M:%S") + "): " + message.content)
         await message.delete()
         response = "Please, do not use vulgar language.\nಠ_ಠ"
         await message.channel.send(response)
@@ -357,7 +370,7 @@ def findWholeWord(w, input_str):
 
 def setSwearWordList():
     global swearWords, discord_name, email, user, password
-    url = 'https://djangobackend-276109.df.r.appspot.com/filterwords/'
+    url = 'http://34.125.57.52/filterwords/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
                       auth=(user, password), headers=headers)
@@ -369,6 +382,7 @@ def setSwearWordList():
     # file_location = parent_location / 'swearWords.txt'
     # file = open(file_location)
     # swearWords = [line.rstrip('\n') for line in file]
+
 
 @tasks.loop(seconds=1)
 async def once_a_second():
