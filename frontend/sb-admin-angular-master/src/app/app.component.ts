@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ChildActivationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
@@ -11,10 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
     title = 'sb-admin-angular';
-    posts: any;
-    readonly ROOT_URL = 'https://jsonplaceholder.typicode.com/todos/1';
-
-    constructor(public router: Router, private titleService: Title, private http: HttpClient) {
+    constructor(public router: Router, private titleService: Title, private http: HttpClientModule) {
         this.router.events
             .pipe(filter(event => event instanceof ChildActivationEnd))
             .subscribe(event => {
@@ -25,10 +22,4 @@ export class AppComponent {
                 this.titleService.setTitle(snapshot.data.title || 'SB Admin Angular');
             });
     }
-
-    getPosts() {
-        this.posts = this.http.get(this.ROOT_URL + '/posts');
-    }
-
-    
 }

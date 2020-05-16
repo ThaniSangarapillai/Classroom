@@ -37,25 +37,34 @@ attendance_heres = []
 reminders = []
 
 groups = []
-
+email = ""
+name = ""
+discord_name = ""
 swearWords = []
 
 @bot.command(name="initialize")
 async def initialize(ctx, *arg):
+    global discord_name, email, user, password
     try:
         if arg[0] == None:
             await ctx.send("Please enter the email address associated with your account to link your account.")
         elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
             await ctx.send("Please enter the email address associated with your account to link your account.")
         else:
-            url = 'http://127.0.0.1:8000/verify/'
+            url = 'https://djangobackend-276109.df.r.appspot.com/verify/'
             myobj = [{'discord_name': 'Thani4847'}]
             headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]}, auth=(user, password), headers=headers)
+            x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]},
+                              auth=(user, password), headers=headers)
             classroom_obj = x.json()[0]
+            discord_name = str(ctx.message.author)
+            email = arg[0]
             print(classroom_obj)
-    except:
+            setSwearWordList()
+    except Exception as e:
+        print(e)
         await ctx.send("Please enter the email address associated with your account to link your account.")
+
 
 @bot.command(name='mute')
 async def mute(ctx):
@@ -66,6 +75,7 @@ async def mute(ctx):
             await x.edit(mute=True)
     await ctx.send("Rans is the big dumb!")
 
+
 @bot.command(name='unmute')
 async def unmute(ctx):
     for x in bot.get_all_members():
@@ -73,10 +83,12 @@ async def unmute(ctx):
             await x.edit(mute=False)
     await ctx.send("Rans is the big dumb!")
 
+
 @bot.command(name='list')
 async def list(ctx):
     text = "The number of students that are online right now are: 0. Ideally the output would be sorted in this priority: online/not online, alphabetical order."
     await ctx.send(text)
+
 
 async def take_attendance(ctx, requested_time, requested_endtime):
     await asyncio.sleep(requested_time)
@@ -85,6 +97,7 @@ async def take_attendance(ctx, requested_time, requested_endtime):
         await ctx.send("Attendance taking is now OVER.\nUsers attending: " + str(len(attendance_heres)))
         global attendance_flag
         attendance_flag = False
+
 
 @bot.command(name='attendance')
 async def attendance(ctx, *args):
@@ -105,6 +118,7 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+
 @bot.command(name="currentreminders")
 async def currentreminders(ctx, *args):
     text = ""
@@ -120,6 +134,7 @@ async def currentreminders(ctx, *args):
 
     await ctx.send(text)
 
+
 @bot.command(name='reminder')
 async def reminder(ctx, *args):
     try:
@@ -133,6 +148,7 @@ async def reminder(ctx, *args):
         usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
         await ctx.send(usage_text)
         return
+
 
 @bot.command(name='removereminder')
 async def removereminder(ctx, *args):
@@ -153,6 +169,7 @@ async def removereminder(ctx, *args):
         usage_text = "Usage:\n!removereminder index"
         await ctx.send(usage_text)
         return
+
 
 @bot.command(name='group')
 async def group(ctx, *args):
@@ -213,18 +230,33 @@ async def group(ctx, *args):
         pass
 
 @bot.command(name='filter')
-@commands.has_role('Teacher')
+#@commands.has_role('Teacher')
 async def filter(ctx,paramOne,word):
+    global swearWords
     if (paramOne.lower() == "add"):
         if (word in swearWords):
             response = "This word is already being filtered."
         else:
-            swearWords.append(word)
+            url = 'https://djangobackend-276109.df.r.appspot.com/add/word/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word":{"word": word}},
+                              auth=(user, password), headers=headers)
+            swearWords = []
+            for y in x.json():
+
+                swearWords.append(y["word"])
             response = "This word has now been added to the filter."
     elif (paramOne.lower() == "remove"):
         if (word in swearWords):
-            swearWords.remove(word)
-            response = "This word has been removed from the filter."
+            url = 'https://djangobackend-276109.df.r.appspot.com/add/word/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
+                              auth=(user, password), headers=headers)
+            swearWords = []
+            for y in x.json():
+
+                swearWords.append(y["word"])
+            response = "This word has been removed from the filer."
         else:
             response = "This word is not part of the filter."
 
@@ -261,22 +293,31 @@ async def on_message(message):
     except:
         await message.channel.send("Improper use of command!")
 
+
 @bot.event
 async def on_ready():
-    setSwearWordList()
     print('{client.user} has connected to Discord!')
+
 
 def findWholeWord(w, input_str):
     return re.match(r'\b({0})\b'.format(w), input_str)
-    #pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
+    # pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
+
 
 def setSwearWordList():
-    global swearWords
+    global swearWords, discord_name, email, user, password
+    url = 'https://djangobackend-276109.df.r.appspot.com/filterwords/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email},
+                      auth=(user, password), headers=headers)
+    for y in x.json():
+        swearWords.append(y["word"])
 
-    parent_location = Path(__file__).absolute().parent
-    file_location = parent_location / 'swearWords.txt'
-    file = open(file_location)
-    swearWords = [line.rstrip('\n') for line in file]
+    print(swearWords)
+    # parent_location = Path(__file__).absolute().parent
+    # file_location = parent_location / 'swearWords.txt'
+    # file = open(file_location)
+    # swearWords = [line.rstrip('\n') for line in file]
 
 @tasks.loop(seconds=1)
 async def once_a_second():
@@ -296,10 +337,11 @@ async def once_a_second():
 
     reminders = [r for r in reminders if r not in remove_reminders]
 
+
 @once_a_second.before_loop
 async def before_once_a_second():
     await bot.wait_until_ready()
 
+
 once_a_second.start()
 bot.run(TOKEN)
-

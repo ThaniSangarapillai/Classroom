@@ -1,6 +1,8 @@
 from djongo import models
 from django import forms
 import datetime
+
+
 # Create your models here.
 
 
@@ -13,9 +15,11 @@ class Student(models.Model):
     name = models.CharField(max_length=100)
     discord_name = models.CharField(max_length=100)
 
+
 class StringField(models.Model):
     word = models.CharField(max_length=50)
     created = models.DateTimeField(default=datetime.datetime.now())
+
 
 class AttendanceEntry(models.Model):
     name = models.CharField(max_length=100)
@@ -29,9 +33,11 @@ class Attendance(models.Model):
         model_container=AttendanceEntry
     )
 
+
 class Reminder(models.Model):
     date_time = models.DateTimeField(default=datetime.datetime.now())
     text = models.TextField(default="")
+
 
 class Classroom(models.Model):
     name = models.CharField(max_length=100)
@@ -57,4 +63,3 @@ class Classroom(models.Model):
     reminders = models.ArrayField(
         model_container=Reminder
     )
-

@@ -19,4 +19,11 @@ urlpatterns = [
     path('change/email/', views.modify_teacher_email),
     path('add/student/', views.add_student),
     path('remove/student/', views.remove_student),
+    path('add/assn/', views.add_assignment),
+    path('remove/assn/', views.remove_assignment),
+    path('modify/assn/', views.modify_assignment),
+    path('add/word/', views.add_word),
+    path('remove/word/', views.remove_word),
+    path('add/attendance/', views.attendance_bulk),
+    path('modify/attendance/', views.modify_attendance),
 ]
