@@ -46,7 +46,7 @@ attendance_heres = {}  # map from guild to list
 
 reminders = {}
 
-groups = []
+groups = {}
 email = ""
 name = ""
 discord_name = ""
@@ -290,41 +290,45 @@ async def group(ctx, *args):
 
     mode = args[0]
 
-    if mode == "dcreate":
+    if mode == "create":
         print("creating groups.")
         num_groups = int(args[1])
         basename = args[2] if len(args) >= 3 else "group"
 
         guild = ctx.message.guild
         for i in range(num_groups):
-            admin_role = get(guild.roles, name="Admin")
             overwrites = {
                 guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                guild.me: discord.PermissionOverwrite(read_messages=True),
-                admin_role: discord.PermissionOverwrite(read_messages=True)
+                get(guild.roles, name=Roles.STUDENT.value): discord.PermissionOverwrite(read_messages=False),
+                get(guild.roles, name=Roles.TEACHER.value): discord.PermissionOverwrite(read_messages=True),
+                get(guild.roles, name="Admin"): discord.PermissionOverwrite(read_messages=True)
             }
             channel = await guild.create_text_channel(basename + "-" + str(i), overwrites=overwrites)
-            groups.append(channel)
-    elif mode == "dlist":
+
+            if guild in groups:
+                groups[guild].append(channel)
+            else:
+                groups[guild] = [channel]
+    elif mode == "list":
         text = "Active groups:\n"
-        for (i, channel) in enumerate(groups):
+        for (i, channel) in enumerate(groups[ctx.guild]):
             text += str(i) + ": " + str(channel) + "\n"
 
         await ctx.send(text)
-    elif mode == "dremoveall":
-        for channel in groups:
+    elif mode == "removeall":
+        for channel in groups[ctx.guild]:
             await channel.delete()
 
-        groups = []
+        groups[ctx.guild] = []
     elif mode == "distributeall":
         guild = ctx.message.guild
 
         students = await getMembersOfRole(guild, Roles.STUDENT.value)
 
-        per_group = len(students) // len(groups)
-        remainder = len(students) % len(groups)
+        per_group = len(students) // len(groups[ctx.guild])
+        remainder = len(students) % len(groups[ctx.guild])
 
-        for (groupnumber, group) in enumerate(groups):
+        for (groupnumber, group) in enumerate(groups[ctx.guild]):
             total = per_group + 1 if groupnumber < remainder else per_group
 
             for i in range(total):
