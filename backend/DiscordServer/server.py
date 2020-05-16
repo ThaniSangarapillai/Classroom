@@ -139,7 +139,7 @@ async def setup(ctx, *args):
 
 @bot.command(name='mute')
 async def mute(ctx):
-    for x in bot.get_all_members():
+    for x in ctx.message.guild.members:
         if x in ctx.message.author.voice.channel.members:
             if x == ctx.message.author:
                 continue
@@ -149,15 +149,27 @@ async def mute(ctx):
 
 @bot.command(name='unmute')
 async def unmute(ctx):
-    for x in bot.get_all_members():
+    for x in ctx.message.guild.members:
         if x in ctx.message.author.voice.channel.members:
             await x.edit(mute=False)
     await ctx.send("Rans is the big dumb!")
 
 
 @bot.command(name='list')
-async def list(ctx):
-    text = "The number of students that are online right now are: 0. Ideally the output would be sorted in this priority: online/not online, alphabetical order."
+async def list(ctx, *args):
+    role = ""
+    if len(args) != 0:
+        role = args[0]
+
+    if role != "":
+        for x in ctx.message.guild.roles:
+            if x.name == role:
+                member_list = x.members
+    else:
+        member_list = ctx.message.guild.members
+
+    text = '\n'.join(member.name for member in member_list)
+    #text = "The number of students that are online right now are: 0. Ideally the output would be sorted in this priority: online/not online, alphabetical order."
     await ctx.send(text)
 
 
