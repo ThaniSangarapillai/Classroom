@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.models import User, Group
@@ -9,8 +10,10 @@ from rest_framework import viewsets
 from rest_framework import permissions, status
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
 from rest_framework.parsers import JSONParser
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, ClassroomSerializer
 from django.contrib.auth.decorators import login_required
 from .models import Classroom, Student, Assignment, Attendance, StringField, Reminder, AttendanceEntry
@@ -80,9 +83,17 @@ class ClassroomViewSet(viewsets.ModelViewSet):
         return Classroom.objects.all()
 
 
-@csrf_exempt
-@login_required()
+# @csrf_exempt
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def verify(request):
+    print(request.META['HTTP_AUTHORIZATION'])
+    # content = {
+    #     'user': request.user,  # `django.contrib.auth.User` instance.
+    #     'auth': request.auth,  # None
+    # }
+    # print(content)
     if request.method == "POST":
         data = JSONParser().parse(request)
         print(data)
@@ -95,7 +106,10 @@ def verify(request):
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def students(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -109,7 +123,10 @@ def students(request):
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def assignments(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -123,7 +140,10 @@ def assignments(request):
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def filterwords(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -137,7 +157,10 @@ def filterwords(request):
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def attendance(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -151,7 +174,10 @@ def attendance(request):
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def reminders(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -164,7 +190,9 @@ def reminders(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def modify_teacher_name(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -178,7 +206,9 @@ def modify_teacher_name(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def modify_teacher_email(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -192,7 +222,9 @@ def modify_teacher_email(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def add_student(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -207,7 +239,9 @@ def add_student(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def remove_student(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -224,7 +258,9 @@ def remove_student(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def add_assignment(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -241,7 +277,9 @@ def add_assignment(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def modify_assignment(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -263,7 +301,9 @@ def modify_assignment(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def remove_assignment(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -280,7 +320,9 @@ def remove_assignment(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def add_word(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -295,7 +337,9 @@ def add_word(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def remove_word(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -311,7 +355,9 @@ def remove_word(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def attendance_bulk(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -343,7 +389,9 @@ def attendance_bulk(request):
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def modify_attendance(request):
     if request.method == "POST":
         data = JSONParser().parse(request)

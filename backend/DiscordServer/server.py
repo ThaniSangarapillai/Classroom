@@ -230,7 +230,7 @@ async def group(ctx, *args):
         pass
 
 @bot.command(name='filter')
-@commands.has_role('Teacher')
+#@commands.has_role('Teacher')
 async def filter(ctx,paramOne,word):
     global swearWords
     if (paramOne.lower() == "add"):
@@ -241,8 +241,9 @@ async def filter(ctx,paramOne,word):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word":{"word": word}},
                               auth=(user, password), headers=headers)
+            swearWords = []
             for y in x.json():
-                swearWords = []
+
                 swearWords.append(y["word"])
             response = "This word has now been added to the filter."
     elif (paramOne.lower() == "remove"):
@@ -251,8 +252,9 @@ async def filter(ctx,paramOne,word):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
                               auth=(user, password), headers=headers)
+            swearWords = []
             for y in x.json():
-                swearWords = []
+
                 swearWords.append(y["word"])
             response = "This word has been removed from the filer."
         else:

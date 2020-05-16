@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -37,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'WebApp',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'teachingassistant.urls'
 
@@ -79,9 +84,9 @@ DATABASES = {
         'ENFORCE_SCHEMA': False,
         'NAME': 'DjangoClassroom',
         'HOST': 'mongodb+srv://lana:lana@teachingassistant-g15s2.gcp.mongodb.net/DjangoClassroom?retryWrites=true&w=majority',
-        'USER': 'lana',
-        'PASS': 'lana',
-        'authMechanism': 'SCRAM-SHA-1'
+        # 'USER': 'lana',
+        # 'PASS': 'lana',
+        # 'authMechanism': 'SCRAM-SHA-1'
     }
 }
 
