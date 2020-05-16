@@ -88,7 +88,7 @@ class ClassroomViewSet(viewsets.ModelViewSet):
 # @authentication_classes((SessionAuthentication, BasicAuthentication))
 # @permission_classes((IsAuthenticated,))
 def verify(request):
-    print(request.META['HTTP_AUTHORIZATION'])
+    #print(request.META['HTTP_AUTHORIZATION'])
     # content = {
     #     'user': request.user,  # `django.contrib.auth.User` instance.
     #     'auth': request.auth,  # None
