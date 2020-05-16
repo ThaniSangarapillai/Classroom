@@ -269,6 +269,8 @@ def findWholeWord(w, input_str):
     #pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 def setSwearWordList():
+    global swearWords
+
     parent_location = Path(__file__).absolute().parent
     file_location = parent_location / 'swearWords.txt'
     file = open(file_location)
