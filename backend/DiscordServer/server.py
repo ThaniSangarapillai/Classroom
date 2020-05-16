@@ -12,10 +12,15 @@ import ast
 import asyncio
 import time
 import datetime
+import json
+#from ..teachingassistant.WebApp import models
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+password = "X7Mz&&am:&dOhnhk|Oq0$W^MYgkD3V|jgp/1*7{5=I4QLC:HFpC&P+FgL>A*w-F"
+user = "TeachingAssistant"
+classroom_obj = None
 
 bot = commands.Bot(command_prefix="!")
 
@@ -33,7 +38,12 @@ async def initialize(ctx, *arg):
         elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
             await ctx.send("Please enter the email address associated with your account to link your account.")
         else:
-            print("wow!")
+            url = 'http://127.0.0.1:8000/verify/'
+            myobj = [{'discord_name': 'Thani4847'}]
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]}, auth=(user, password), headers=headers)
+            classroom_obj = x.json()[0]
+            print(classroom_obj)
     except:
         await ctx.send("Please enter the email address associated with your account to link your account.")
 
@@ -127,5 +137,5 @@ def findWholeWord(w, input_str):
     #pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 
-
 bot.run(TOKEN)
+

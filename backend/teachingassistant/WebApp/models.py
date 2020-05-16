@@ -2,172 +2,59 @@ from djongo import models
 from django import forms
 import datetime
 # Create your models here.
-# class BadWord(models.Model):
-#     word = models.CharField(max_length=255)
-#
-#     class Meta:
-#         abstract = True
-#
-# class BadWordForm(forms.ModelForm):
-#     class Meta:
-#         model = BadWord
-#         fields = (
-#             'word',
-#         )
+
 
 class Assignment(models.Model):
     name = models.CharField(max_length=50)
-    duedate = models.DateTimeField()
-
-    class Meta:
-        abstract = True
-
-class AssignmentForm(forms.ModelForm):
-    class Meta:
-        model = Assignment
-        fields = (
-            'name', 'duedate'
-        )
-
+    duedate = models.DateTimeField(default=datetime.datetime.now())
 
 
 class Student(models.Model):
     name = models.CharField(max_length=100)
     discord_name = models.CharField(max_length=100)
-    assignments = models.ArrayField(
-        model_container=Assignment,
-        model_form_class=AssignmentForm
-    )
-
-    class Meta:
-        abstract = True
-
-class StudentForm(forms.ModelForm):
-    class Meta:
-        model = Student
-        fields = (
-            'name', 'discord_name', 'assignments'
-        )
-
-class AStudent(models.Model):
-    name = models.CharField(max_length=100)
-    discord_name = models.CharField(max_length=100)
-
-    class Meta:
-        abstract = True
-
-class AStudentForm(forms.ModelForm):
-    class Meta:
-        model = AStudent
-        fields = (
-            'name', 'discord_name'
-        )
-
-class Teacher(models.Model):
-    name = models.CharField(max_length=100)
-    discord_name = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    class Meta:
-        abstract = True
-
-class TeacherForm(forms.ModelForm):
-    class Meta:
-        model = AStudent
-        fields = (
-            'name', 'discord_name', 'email'
-        )
 
 class StringField(models.Model):
     word = models.CharField(max_length=50)
-    assigned_by = models.EmbeddedField(
-        model_container=AStudent,
-        model_form_class=AStudentForm
-    )
-    class Meta:
-        abstract = True
-
-class StringFieldForm(forms.ModelForm):
-    class Meta:
-        model = StringField
-        fields = (
-            'word', 'assigned_by'
-        )
+    created = models.DateTimeField(default=datetime.datetime.now())
 
 class AttendanceEntry(models.Model):
-    student = models.EmbeddedField(
-        model_container=AStudent,
-        model_form_class=AStudentForm
-    )
+    name = models.CharField(max_length=100)
+    discord_name = models.CharField(max_length=100)
     presence = models.BooleanField(default=False)
 
-    class Meta:
-        abstract = True
-
-class AttendanceEntryForm(forms.ModelForm):
-    class Meta:
-        model = AttendanceEntry
-        fields = (
-            'student', 'presence'
-        )
 
 class Attendance(models.Model):
     day = models.DateField(default=datetime.date.today)
     student_list = models.ArrayField(
-        model_container=AttendanceEntry,
-        model_form_class=AttendanceEntryForm
+        model_container=AttendanceEntry
     )
 
-    class Meta:
-        abstract = True
-# class CurrentDay(models.Model):
-#     day = models.DateField()
-#     attend_list = models.EmbeddedField(
-#         model_container=Attendance,
-#         model_form_class=AttendanceForm
-#     )
-#
-#     class Meta:
-#         abstract = True
-
-class AttendanceForm(forms.ModelForm):
-    class Meta:
-        model = Attendance
-        fields = (
-            'day', 'student_list'
-        )
+class Reminder(models.Model):
+    date_time = models.DateTimeField(default=datetime.datetime.now())
+    text = models.TextField(default="")
 
 class Classroom(models.Model):
-    teacher = models.EmbeddedField(
-        model_container=Teacher,
-        model_form_class=TeacherForm
-    )
+    name = models.CharField(max_length=100)
+    discord_name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
 
     students = models.ArrayField(
-        model_container=Student,
-        model_form_class=StudentForm
+        model_container=Student
     )
 
     assignments = models.ArrayField(
-        model_container=Assignment,
-        model_form_class=AssignmentForm
+        model_container=Assignment
     )
 
     filter_words = models.ArrayField(
-        model_container=StringField,
-        model_form_class=StringFieldForm
+        model_container=StringField
     )
 
     attendance = models.ArrayField(
-        model_container=Attendance,
-        model_form_class=AttendanceForm
+        model_container=Attendance
     )
 
-# class Words(models.Model):
-#     _id = models.ObjectIdField()
-#     words = models.ArrayField(
-#         model_container=BadWord,
-#         model_form_class=BadWordForm,
-#         default=None
-#     )
-#
-#     objects = models.DjongoManager()
+    reminders = models.ArrayField(
+        model_container=Reminder
+    )
+
