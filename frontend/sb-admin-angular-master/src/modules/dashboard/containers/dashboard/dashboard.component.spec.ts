@@ -4,6 +4,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DashboardComponent } from './dashboard.component';
 
+
+import { }
+
 @Component({
     template: `
         <sb-dashboard [someInput]="someInput" (someFunction)="someFunction($event)"></sb-dashboard>
