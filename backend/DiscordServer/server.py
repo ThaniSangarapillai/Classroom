@@ -23,14 +23,22 @@ bot = commands.Bot(command_prefix="!")
 attendance_flag = False
 attendance_heres = []
 
-reminders_dict = {}
+reminders = []
 
-@bot.command(name='addgreeting')
-async def addgreeting(ctx, arg, arg_two, arg_three):
-    ctx.send("Rans is the big dumb!")
+@bot.command(name="initialize")
+async def initialize(ctx, *arg):
+    try:
+        if arg[0] == None:
+            await ctx.send("Please enter the email address associated with your account to link your account.")
+        elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
+            await ctx.send("Please enter the email address associated with your account to link your account.")
+        else:
+            print("wow!")
+    except:
+        await ctx.send("Please enter the email address associated with your account to link your account.")
 
 @bot.command(name='mute')
-async def addgreeting(ctx):
+async def mute(ctx):
     for x in bot.get_all_members():
         if x in ctx.message.author.voice.channel.members:
             if x == ctx.message.author:
@@ -39,7 +47,7 @@ async def addgreeting(ctx):
     await ctx.send("Rans is the big dumb!")
 
 @bot.command(name='unmute')
-async def addgreeting(ctx):
+async def unmute(ctx):
     for x in bot.get_all_members():
         if x in ctx.message.author.voice.channel.members:
             await x.edit(mute=False)
@@ -104,7 +112,10 @@ async def on_message(message):
         else:
             await message.channel.send("Duplicate user.")
 
-    await bot.process_commands(message)
+    try:
+        await bot.process_commands(message)
+    except:
+        await message.channel.send("Improper use of command!")
 
 @bot.event
 async def on_ready():
