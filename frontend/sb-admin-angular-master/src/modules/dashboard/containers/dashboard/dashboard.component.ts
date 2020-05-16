@@ -10,17 +10,11 @@ import { DashboardService } from '@modules/dashboard/services/dashboard.service'
 export class DashboardComponent implements OnInit {
     stuff: any;
     constructor(private _http: DashboardService) {}
-    ngOnInit() {
-        // this._http.getPosts().subscribe(data =>{
-        //     this.stuff = data;
-        //     console.log(this.stuff);
-        // });
-    }
+    ngOnInit() {}
 
-    getPosts() {
+    getData() {
         this._http.getPosts().subscribe(data => {
             this.stuff = data;
-            console.log(this.stuff);
             return this.stuff;
         });
     }

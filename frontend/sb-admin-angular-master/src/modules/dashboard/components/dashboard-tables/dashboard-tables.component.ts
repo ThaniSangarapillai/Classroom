@@ -9,13 +9,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 })
 export class DashboardTablesComponent implements OnInit {
     constructor(private _https: HttpClient) {}
-    ngOnInit() {
-        const table = document.getElementById('dashTable') as HTMLFormElement;
-        table.isVisible = true;
-    }
+    ngOnInit() {}
 
     hide() {
         const table = document.getElementById('dashTable') as HTMLFormElement;
-        table.isVisible = true;
+        table.hidden = true;
     }
 }

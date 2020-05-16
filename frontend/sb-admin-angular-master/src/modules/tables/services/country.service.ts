@@ -1,6 +1,8 @@
 import { DecimalPipe } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, PipeTransform } from '@angular/core';
-import { COUNTRIES } from '@modules/tables/data/countries';
+import { DashboardService } from '@modules/dashboard/services/dashboard.service';
+// import { COUNTRIES } from '@modules/tables/data/countries';
 import { SortDirection } from '@modules/tables/directives';
 import { Country } from '@modules/tables/models';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -37,8 +39,8 @@ function sort(countries: Country[], column: string, direction: string): Country[
 function matches(country: Country, term: string, pipe: PipeTransform) {
     return (
         country.name.toLowerCase().includes(term.toLowerCase()) ||
-        pipe.transform(country.area).includes(term) ||
-        pipe.transform(country.population).includes(term)
+        pipe.transform(country.name).includes(term) ||
+        pipe.transform(country.discord_name).includes(term)
     );
 }
 
@@ -48,6 +50,7 @@ export class CountryService {
     private _search$ = new Subject<void>();
     private _countries$ = new BehaviorSubject<Country[]>([]);
     private _total$ = new BehaviorSubject<number>(0);
+    stuff!: Country[];
 
     private _state: State = {
         page: 1,
@@ -57,7 +60,10 @@ export class CountryService {
         sortDirection: '',
     };
 
-    constructor(private pipe: DecimalPipe) {
+    constructor(private pipe: DecimalPipe, private _http: DashboardService) {
+        this._http.getPosts().subscribe(data => {
+            this.stuff = data;
+        });
         this._search$
             .pipe(
                 tap(() => this._loading$.next(true)),
@@ -70,8 +76,14 @@ export class CountryService {
                 this._countries$.next(result.countries);
                 this._total$.next(result.total);
             });
-
         this._search$.next();
+    }
+
+    getData(): Country[] {
+        this._http.getPosts().subscribe(data => {
+            this.stuff = data;
+        });
+        return this.stuff;
     }
 
     get countries$() {
@@ -117,7 +129,7 @@ export class CountryService {
         const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
         // 1. sort
-        let countries = sort(COUNTRIES, sortColumn, sortDirection);
+        let countries = sort(this.stuff, sortColumn, sortDirection);
 
         // 2. filter
         countries = countries.filter(country => matches(country, searchTerm, this.pipe));
