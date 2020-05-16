@@ -37,7 +37,6 @@ classroom_obj = None
 
 bot = commands.Bot(command_prefix="!")
 
-teachers_lounge = 711089932256542721
 channel_reminders = 711102253800620073
 student_roleid = 711143892304527360
 
@@ -331,8 +330,9 @@ async def on_message(message):
             await message.channel.send("Duplicate user.")
 
     messageWords = message.content.split()
-
+    print(messageWords)
     if any(word in messageWords for word in swearWords):
+        print("bad")
         channel = await getChannel(message.guild, TextChannels.TEACHERS_LOUNGE.value)
         await channel.send(message.author.name + " (" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
         await message.delete()
@@ -375,7 +375,6 @@ async def once_a_second():
     # check reminders
     global reminders
     currentdatetime = datetime.datetime.now()
-    print(currentdatetime)
 
     for guild in reminders:
         remove_reminders = []
