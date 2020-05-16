@@ -20,6 +20,22 @@ bot = commands.Bot(command_prefix="!")
 async def addgreeting(ctx, arg, arg_two, arg_three):
     ctx.send("Rans is the big dumb!")
 
+@bot.command(name='mute')
+async def addgreeting(ctx):
+    for x in bot.get_all_members():
+        if x in ctx.message.author.voice.channel.members:
+            if x == ctx.message.author:
+                continue
+            await x.edit(mute=True)
+    await ctx.send("Rans is the big dumb!")
+
+@bot.command(name='unmute')
+async def addgreeting(ctx):
+    for x in bot.get_all_members():
+        if x in ctx.message.author.voice.channel.members:
+            await x.edit(mute=False)
+    await ctx.send("Rans is the big dumb!")
+
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
