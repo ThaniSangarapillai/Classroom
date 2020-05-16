@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'WebApp',
 ]
 
 MIDDLEWARE = [
@@ -75,9 +76,12 @@ WSGI_APPLICATION = 'Classroom.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'DjangoClassroom',
+        'HOST': 'mongodb+srv://Thani:7YVvQpNlN17NwqDc@teachingassistant-g15s2.gcp.mongodb.net/test?retryWrites=true&w=majority',
+        'USER': 'Thani',
+        'PASSWORD': '7YVvQpNlN17NwqDc',
     }
 }
 
