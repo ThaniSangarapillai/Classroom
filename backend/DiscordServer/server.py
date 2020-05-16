@@ -40,12 +40,9 @@ classroom_obj = None
 
 bot = commands.Bot(command_prefix="!")
 
-channel_reminders = 711102253800620073
-student_roleid = 711143892304527360
-
 # state
-attendance_flag = False
-attendance_heres = []
+attendance_flag = {}  # map from guild to bool
+attendance_heres = {}  # map from guild to list
 
 reminders = {}
 
@@ -182,7 +179,6 @@ async def list(ctx, *args):
         member_list = ctx.message.guild.members
 
     text = '\n'.join(member.name for member in member_list)
-    #text = "The number of students that are online right now are: 0. Ideally the output would be sorted in this priority: online/not online, alphabetical order."
     await ctx.send(text)
 
 
@@ -190,10 +186,25 @@ async def take_attendance(ctx, requested_time, requested_endtime):
     await asyncio.sleep(requested_time)
 
     if requested_endtime == attendance_endtime:
-        await ctx.send("Attendance taking is now OVER.\nUsers attending: " + str(len(attendance_heres)))
-        global attendance_flag
-        attendance_flag = False
+        list = ""
+        for member in attendance_heres[ctx.guild]:
+            list += str(member) + "\n"
 
+        await ctx.send("Attendance taking is now OVER.\nUsers attending: " + str(len(attendance_heres[ctx.guild])) +
+                       "\n" + list)
+
+        global attendance_flag
+        attendance_flag[ctx.guild] = False
+
+        # aggregate all members
+        student_list = []  # of the form [{"discord_name":"TheRunningMan#8456", "presence":"True"}]
+        all_students = await getMembersOfRole(ctx.guild, Roles.STUDENT.value)
+
+        for student in all_students:
+            presence = student in attendance_heres[ctx.guild]
+            student_list += [{"discord_name": str(student), "presence": presence}]
+
+        print(student_list)
 
 @bot.command(name='attendance')
 async def attendance(ctx, *args):
@@ -208,9 +219,9 @@ async def attendance(ctx, *args):
 
     await ctx.send("Taking attendance for " + str(requested_time) + " seconds. Type \"here\" everyone!")
     global attendance_flag, attendance_heres, attendance_endtime
-    attendance_flag = True
+    attendance_flag[ctx.guild] = True
     attendance_endtime = requested_time + time.time()
-    attendance_heres = []
+    attendance_heres[ctx.guild] = []
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
@@ -375,10 +386,10 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if attendance_flag and message.content.lower() == "here":
+    if message.guild in attendance_flag and attendance_flag[message.guild] and message.content.lower() == "here":
         global attendance_heres
-        if message.author not in attendance_heres:
-            attendance_heres += [message.author]
+        if message.author not in attendance_heres[message.guild]:
+            attendance_heres[message.guild] += [message.author]
         else:
             await message.channel.send("Duplicate user.")
 
