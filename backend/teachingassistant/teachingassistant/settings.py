@@ -52,7 +52,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'teachingassistant.urls'
 
@@ -84,9 +83,9 @@ DATABASES = {
         'ENFORCE_SCHEMA': False,
         'NAME': 'DjangoClassroom',
         'HOST': 'mongodb+srv://lana:lana@teachingassistant-g15s2.gcp.mongodb.net/DjangoClassroom?retryWrites=true&w=majority',
-        # 'USER': 'lana',
-        # 'PASS': 'lana',
-        # 'authMechanism': 'SCRAM-SHA-1'
+        'USER': 'lana',
+        'PASS': 'lana',
+        'authMechanism': 'SCRAM-SHA-1'
     }
 }
 
@@ -126,3 +125,5 @@ USE_TZ = True
 
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_ALLOW_ALL = True

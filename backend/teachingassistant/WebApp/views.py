@@ -88,7 +88,7 @@ class ClassroomViewSet(viewsets.ModelViewSet):
 # @authentication_classes((SessionAuthentication, BasicAuthentication))
 # @permission_classes((IsAuthenticated,))
 def verify(request):
-    print(request.META['HTTP_AUTHORIZATION'])
+    #print(request.META['HTTP_AUTHORIZATION'])
     # content = {
     #     'user': request.user,  # `django.contrib.auth.User` instance.
     #     'auth': request.auth,  # None
@@ -359,6 +359,7 @@ def remove_word(request):
 # @authentication_classes((SessionAuthentication, BasicAuthentication))
 # @permission_classes((IsAuthenticated,))
 def attendance_bulk(request):
+    unregistered = []
     if request.method == "POST":
         data = JSONParser().parse(request)
         change = False
@@ -377,15 +378,27 @@ def attendance_bulk(request):
 
             for x in data["student_list"]:
                 print(x)
-                temp_stud = AttendanceEntry(**x)
+                for y in snippets.students:
+                    if y.discord_name == x["discord_name"]:
+                        name = y.name
+                        break
+                else:
+                    unregistered.append(x["discord_name"])
+                    continue
+
+                temp_stud = AttendanceEntry(name=name,**x)
                 print(temp_stud)
-                temp_attend.student_list.append(temp_stud)
+                for x in temp_attend.student_list:
+                    if x.discord_name == temp_stud.discord_name:
+                        break
+                else:
+                    temp_attend.student_list.append(temp_stud)
 
             if not change:
                 snippets.attendance.append(temp_attend)
             snippets.save()
             print(snippets)
-            return JsonResponse({}, status=status.HTTP_200_OK)
+            return JsonResponse({"unregistered": unregistered}, status=status.HTTP_200_OK)
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
