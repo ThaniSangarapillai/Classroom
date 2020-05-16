@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "classroomBot"
+    }
+  },
+  "defaultProject": "classroomBot",
+  "cli": {
+    "analytics": "88a546a9-ec6b-427b-ac94-aa788726c88a"
+  }
 }
