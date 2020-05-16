@@ -299,23 +299,15 @@ async def filter(ctx, paramOne, word):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
                               auth=(user, password), headers=headers)
-            swearWords = []
-            print(x.json())
-            for y in x.json():
-                swearWords.append(y["word"])
-            print(swearWords)
+            setSwearWordList()
             response = "This word has now been added to the filter."
     elif (paramOne.lower() == "remove"):
         if (word in swearWords):
-            url = 'http://34.125.57.52/add/word/'
+            url = 'http://34.125.57.52/remove/word/'
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
                               auth=(user, password), headers=headers)
-            swearWords = []
-            print(x.json())
-            for y in x.json():
-                swearWords.append(y["word"])
-            print(swearWords)
+            setSwearWordList()
             response = "This word has been removed from the filer."
         else:
             response = "This word is not part of the filter."
@@ -374,6 +366,7 @@ def setSwearWordList():
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
                       auth=(user, password), headers=headers)
+    swearWords = []
     for y in x.json():
         swearWords.append(y["word"])
 
