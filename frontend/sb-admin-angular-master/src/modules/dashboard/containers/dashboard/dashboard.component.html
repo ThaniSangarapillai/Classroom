@@ -8,9 +8,7 @@
     <sb-dashboard-tables>
 
     </sb-dashboard-tables>
-    <button (click)="getPosts()">Get Posts
-
-    </button>
+    <button (click)="getPosts()">Get Posts</button>
     <div *ngFor="let post of posts | async">
         {{ post | json }}
     </div>

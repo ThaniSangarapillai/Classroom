@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { DashboardService } from '@modules/dashboard/services/dashboard.service';
 
 @Component({
     selector: 'sb-dashboard-cards',
@@ -7,6 +8,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     styleUrls: ['dashboard-cards.component.scss'],
 })
 export class DashboardCardsComponent implements OnInit {
-    constructor() {}
+    constructor(private _http: DashboardService) {}
     ngOnInit() {}
 }
