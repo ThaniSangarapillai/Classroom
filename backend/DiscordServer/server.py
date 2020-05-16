@@ -247,7 +247,7 @@ async def on_message(message):
         else:
             await message.channel.send("Duplicate user.")
 
-    if any(swear in message.content for swear in swearWords):
+    if any((swear + ' ') in message.content for swear in swearWords) or any((' ' + swear) in message.content for swear in swearWords) or (message.content in swearWords):
         channel = bot.get_channel(teachers_lounge)
         await channel.send(message.author.name + " (" + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
         await message.delete()
