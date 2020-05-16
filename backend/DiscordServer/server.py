@@ -224,7 +224,7 @@ async def filter(ctx,paramOne,word):
     elif (paramOne.lower() == "remove"):
         if (word in swearWords):
             swearWords.remove(word)
-            response = "This word has been removed from the filer."
+            response = "This word has been removed from the filter."
         else:
             response = "This word is not part of the filter."
 
@@ -247,7 +247,9 @@ async def on_message(message):
         else:
             await message.channel.send("Duplicate user.")
 
-    if any((swear + ' ') in message.content for swear in swearWords) or any((' ' + swear) in message.content for swear in swearWords) or (message.content in swearWords):
+    messageWords = message.content.split()
+
+    if any(word in messageWords for word in swearWords):
         channel = bot.get_channel(teachers_lounge)
         await channel.send(message.author.name + " (" + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
         await message.delete()
