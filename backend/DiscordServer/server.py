@@ -3,6 +3,7 @@ import os
 import re
 import discord
 from discord.ext import commands, tasks
+from discord.utils import get
 from dotenv import load_dotenv
 import time
 import random
@@ -20,12 +21,15 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix="!")
 
 channel_reminders = 711102253800620073
+student_roleid = 711143892304527360
 
 # state
 attendance_flag = False
 attendance_heres = []
 
 reminders = []
+
+groups = []
 
 @bot.command(name="initialize")
 async def initialize(ctx, *arg):
@@ -136,6 +140,66 @@ async def removereminder(ctx, *args):
         await ctx.send(usage_text)
         return
 
+@bot.command(name='group')
+async def group(ctx, *args):
+    global groups
+
+    mode = args[0]
+
+    if mode == "create":
+        num_groups = int(args[1])
+        basename = args[2]
+
+        guild = ctx.message.guild
+        for i in range(num_groups):
+            admin_role = get(guild.roles, name="Admin")
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                guild.me: discord.PermissionOverwrite(read_messages=True),
+                admin_role: discord.PermissionOverwrite(read_messages=True)
+            }
+            channel = await guild.create_text_channel(basename + "-" + str(i), overwrites=overwrites)
+            groups.append(channel)
+    elif mode == "list":
+        text = "Active groups:\n"
+        for (i, channel) in enumerate(groups):
+            text += str(i) + ": " + str(channel) + "\n"
+
+        await ctx.send(text)
+    elif mode == "removeall":
+        for channel in groups:
+            await channel.delete()
+
+        groups = []
+    elif mode == "assignall":
+        guild = ctx.message.guild
+
+        students = guild.get_role(711143892304527360).members
+        print(students)
+
+        print(groups)
+
+        per_group = len(students) // len(groups)
+        remainder = len(students) % len(groups)
+
+        for (groupnumber, group) in enumerate(groups):
+            total = per_group + 1 if groupnumber < remainder else per_group
+
+            for i in range(total):
+                # add student
+                student = students.pop()
+                print("add " + str(student) + " to " + str(group))
+                await group.set_permissions(student, read_messages=True, send_messages=True)
+    elif mode == "move":
+        # student = get_member_named(args[1])
+        # group = groups[int(args[2])] // TODO STILL NEED TO REMOVE STUDENT FROM PREVIOUS GROUP.
+        #
+        # await group.set_permissions(student, read_messages=True, send_messages=True)
+
+        pass
+
+
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -179,8 +243,6 @@ async def once_a_second():
             await channel.send(message)
 
     reminders = [r for r in reminders if r not in remove_reminders]
-
-    print(reminders)
 
 @once_a_second.before_loop
 async def before_once_a_second():
