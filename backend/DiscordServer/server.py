@@ -94,26 +94,44 @@ async def setup(ctx, *args):
     await getChannel(guild, TextChannels.REMINDERS.value)
     await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value)
 
-
-@bot.command(name="initialize")
-async def initialize(ctx, *arg):
     global discord_name, email, user, password
     # try:
-    if arg[0] == None:
+    if args[0] == None:
         await ctx.send("Please enter the email address associated with your account to link your account.")
-    elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
+    elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", args[0]):
         await ctx.send("Please enter the email address associated with your account to link your account.")
     else:
         url = 'http://34.125.57.52/verify/'
         myobj = [{'discord_name': 'Thani4847'}]
         headers = {'content-type': 'application/json'}
-        x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]},
+        x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": args[0]},
                           auth=(user, password), headers=headers)
         classroom_obj = x.json()[0]
         discord_name = str(ctx.message.author)
-        email = arg[0]
+        email = args[0]
         print(classroom_obj)
         setSwearWordList()
+
+
+# @bot.command(name="initialize")
+# async def initialize(ctx, *arg):
+#     global discord_name, email, user, password
+#     # try:
+#     if arg[0] == None:
+#         await ctx.send("Please enter the email address associated with your account to link your account.")
+#     elif not re.match("^[a-zA-Z0-9]+@[a-zA-Z]+.[a-z]+$", arg[0]):
+#         await ctx.send("Please enter the email address associated with your account to link your account.")
+#     else:
+#         url = 'http://34.125.57.52/verify/'
+#         myobj = [{'discord_name': 'Thani4847'}]
+#         headers = {'content-type': 'application/json'}
+#         x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": arg[0]},
+#                           auth=(user, password), headers=headers)
+#         classroom_obj = x.json()[0]
+#         discord_name = str(ctx.message.author)
+#         email = arg[0]
+#         print(classroom_obj)
+#         setSwearWordList()
 # except Exception as e:
 #     print(e)
 #     await ctx.send("Please enter the email address associated with your account to link your account.")
@@ -289,36 +307,42 @@ async def group(ctx, *args):
 
 @bot.command(name='filter')
 # @commands.has_role('Teacher')
-async def filter(ctx, paramOne, word):
+async def filter(ctx, *args):
     global swearWords
-    if (paramOne.lower() == "add"):
-        if (word in swearWords):
+    print(args)
+
+    if (len(args) == 0):
+        response = '\n'.join(swearWords)
+    elif (args[0].lower() == "add"):
+        print("hello")
+        if (args[1] in swearWords):
             response = "This word is already being filtered."
         else:
             url = 'http://34.125.57.52/add/word/'
             headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
                               auth=(user, password), headers=headers)
             setSwearWordList()
             response = "This word has now been added to the filter."
-    elif (paramOne.lower() == "remove"):
-        if (word in swearWords):
+    elif (args[0].lower() == "remove"):
+        if (args[1] in swearWords):
             url = 'http://34.125.57.52/remove/word/'
             headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": word}},
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
                               auth=(user, password), headers=headers)
             setSwearWordList()
             response = "This word has been removed from the filer."
         else:
             response = "This word is not part of the filter."
 
+
     await ctx.send(response)
 
 
-@bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.CheckFailure):
-        await ctx.send("Sorry, only the teacher can use that command.\n¯\_(ツ)_/¯")
+# @bot.event
+# async def on_command_error(ctx, error):
+#     if isinstance(error, commands.errors.CheckFailure):
+#         await ctx.send("Sorry, only the teacher can use that command.\n¯\_(ツ)_/¯")
 
 
 @bot.event
