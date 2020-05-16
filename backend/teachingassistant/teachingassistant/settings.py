@@ -81,9 +81,10 @@ DATABASES = {
             'ENGINE': 'djongo',
             'ENFORCE_SCHEMA': False,
             'NAME': 'DjangoClassroom',
-            'HOST': 'mongodb+srv://lana:lana@teachingassistant-g15s2.gcp.mongodb.net/test?retryWrites=true&w=majority',
-            'USER': 'lana',
-            'PASSWORD': 'lana',
+                'HOST': 'mongodb+srv://lana:lana@teachingassistant-g15s2.gcp.mongodb.net/DjangoClassroom?retryWrites=true&w=majority',
+                'USER': 'lana',
+                'PASS': 'lana',
+                'authMechanism': 'SCRAM-SHA-1'
         }
     }
 
