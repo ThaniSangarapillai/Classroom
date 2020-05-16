@@ -12,10 +12,21 @@ import datetime
 import ast
 import asyncio
 import time
-from datetime import datetime
 import json
 from pathlib import Path
 #from ..teachingassistant.WebApp import models
+from enum import Enum
+
+# all required roles that should be present at all times go here
+class Roles(Enum):
+    TEACHER = "Teacher"
+    TA = "TA"
+    STUDENT = "Student"
+
+# all required text channels that should be present at all times go here
+class TextChannels(Enum):
+    REMINDERS = "reminders"
+    TEACHERS_LOUNGE = "teachers-lounge"
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -34,13 +45,49 @@ student_roleid = 711143892304527360
 attendance_flag = False
 attendance_heres = []
 
-reminders = []
+reminders = {}
 
 groups = []
 email = ""
 name = ""
 discord_name = ""
 swearWords = []
+
+
+async def getRole(guild, name, colour=0x1fff7c):
+    role = get(guild.roles, name=name)
+    if role is None:
+        return await guild.create_role(name=name, colour=discord.Colour(colour))
+    else:
+        return role
+
+async def getChannel(guild, name):
+    print(name, type(name))
+    name = name.lower()
+    channel = get(guild.channels, name=name)
+    if channel is None:
+        return await guild.create_text_channel(name=name)
+    else:
+        return channel
+
+async def getMembersOfRole(guild, role_name):
+    role = await getRole(guild, role_name)
+
+    members = []
+    for member in guild.members:
+        if role in member.roles:
+            members += [member]
+
+    return members
+
+@bot.command(name="setup")
+async def setup(ctx, *args):
+    guild = ctx.guild
+    await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
+    await getRole(guild, Roles.TEACHER.value, 0xff4af9)
+    await getRole(guild, Roles.TA.value, 0x3bffef)
+    await getChannel(guild, TextChannels.REMINDERS.value)
+    await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value)
 
 @bot.command(name="initialize")
 async def initialize(ctx, *arg):
@@ -124,7 +171,8 @@ async def currentreminders(ctx, *args):
     text = ""
     i = 0
 
-    for reminder in reminders:
+    guild_reminders = reminders[ctx.guild]
+    for reminder in guild_reminders:
         (datetime, message) = reminder
         text += str(i) + ":"
         text += " " + str(datetime)
@@ -137,17 +185,21 @@ async def currentreminders(ctx, *args):
 
 @bot.command(name='reminder')
 async def reminder(ctx, *args):
-    try:
-        time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
-        print(time)
+    # try:
+    time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
+    print(time)
 
-        global reminders
-        reminders += [(time, args[2])]
-        await ctx.send("A reminder has been added.")
-    except:
-        usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
-        await ctx.send(usage_text)
-        return
+    global reminders
+    if ctx.guild in reminders:
+        reminders[ctx.guild] += [(time, args[2])]
+    else:
+        reminders[ctx.guild] = [(time, args[2])]
+    await ctx.send("A reminder has been added.")
+    print(reminders)
+    # except:
+    #     usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
+    #     await ctx.send(usage_text)
+    #     return
 
 
 @bot.command(name='removereminder')
@@ -155,8 +207,9 @@ async def removereminder(ctx, *args):
     try:
         index = int(args[0])
         global reminders
-        toremove = reminders[index]
-        reminders.pop(index)
+        guildreminders = reminders[ctx.guild]
+        toremove = guildreminders[index]
+        guildreminders.pop(index)
 
         (datetime, message) = toremove
         text = str(index) + ":"
@@ -177,9 +230,10 @@ async def group(ctx, *args):
 
     mode = args[0]
 
-    if mode == "create":
+    if mode == "dcreate":
+        print("creating groups.")
         num_groups = int(args[1])
-        basename = args[2]
+        basename = args[2] if len(args) >= 3 else "group"
 
         guild = ctx.message.guild
         for i in range(num_groups):
@@ -191,24 +245,21 @@ async def group(ctx, *args):
             }
             channel = await guild.create_text_channel(basename + "-" + str(i), overwrites=overwrites)
             groups.append(channel)
-    elif mode == "list":
+    elif mode == "dlist":
         text = "Active groups:\n"
         for (i, channel) in enumerate(groups):
             text += str(i) + ": " + str(channel) + "\n"
 
         await ctx.send(text)
-    elif mode == "removeall":
+    elif mode == "dremoveall":
         for channel in groups:
             await channel.delete()
 
         groups = []
-    elif mode == "assignall":
+    elif mode == "distributeall":
         guild = ctx.message.guild
 
-        students = guild.get_role(711143892304527360).members
-        print(students)
-
-        print(groups)
+        students = await getMembersOfRole(guild, Roles.STUDENT.value)
 
         per_group = len(students) // len(groups)
         remainder = len(students) % len(groups)
@@ -282,8 +333,8 @@ async def on_message(message):
     messageWords = message.content.split()
 
     if any(word in messageWords for word in swearWords):
-        channel = bot.get_channel(teachers_lounge)
-        await channel.send(message.author.name + " (" + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
+        channel = await getChannel(message.guild, TextChannels.TEACHERS_LOUNGE.value)
+        await channel.send(message.author.name + " (" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
         await message.delete()
         response = "Please, do not use vulgar language.\nಠ_ಠ"
         await message.channel.send(response)
@@ -324,18 +375,21 @@ async def once_a_second():
     # check reminders
     global reminders
     currentdatetime = datetime.datetime.now()
-    remove_reminders = []
+    print(currentdatetime)
 
-    for reminder in reminders:
-        (reminderdatetime, message) = reminder
+    for guild in reminders:
+        remove_reminders = []
 
-        if reminderdatetime <= currentdatetime:
-            print("Reminder! " + message)
-            remove_reminders += [reminder]
-            channel = bot.get_channel(channel_reminders)
-            await channel.send(message)
+        for reminder in reminders[guild]:
+            (reminderdatetime, message) = reminder
 
-    reminders = [r for r in reminders if r not in remove_reminders]
+            if reminderdatetime <= currentdatetime:
+                print("Reminder! " + message)
+                remove_reminders += [reminder]
+                channel = await getChannel(guild, TextChannels.REMINDERS.value)
+                await channel.send(message)
+
+        reminders[guild] = [r for r in reminders[guild] if r not in remove_reminders]
 
 
 @once_a_second.before_loop
