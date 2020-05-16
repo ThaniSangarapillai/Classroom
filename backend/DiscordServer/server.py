@@ -12,8 +12,9 @@ import datetime
 import ast
 import asyncio
 import time
-import datetime
+from datetime import datetime
 import json
+from pathlib import Path
 #from ..teachingassistant.WebApp import models
 
 load_dotenv()
@@ -25,6 +26,7 @@ classroom_obj = None
 
 bot = commands.Bot(command_prefix="!")
 
+teachers_lounge = 711089932256542721
 channel_reminders = 711102253800620073
 student_roleid = 711143892304527360
 
@@ -35,6 +37,8 @@ attendance_heres = []
 reminders = []
 
 groups = []
+
+swearWords = []
 
 @bot.command(name="initialize")
 async def initialize(ctx, *arg):
@@ -208,7 +212,28 @@ async def group(ctx, *args):
 
         pass
 
+@bot.command(name='filter')
+@commands.has_role('Teacher')
+async def filter(ctx,paramOne,word):
+    if (paramOne.lower() == "add"):
+        if (word in swearWords):
+            response = "This word is already being filtered."
+        else:
+            swearWords.append(word)
+            response = "This word has now been added to the filter."
+    elif (paramOne.lower() == "remove"):
+        if (word in swearWords):
+            swearWords.remove(word)
+            response = "This word has been removed from the filer."
+        else:
+            response = "This word is not part of the filter."
 
+    await ctx.send(response)
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        await ctx.send("Sorry, only the teacher can use that command.\n¯\_(ツ)_/¯")
 
 @bot.event
 async def on_message(message):
@@ -222,6 +247,13 @@ async def on_message(message):
         else:
             await message.channel.send("Duplicate user.")
 
+    if any(swear in message.content for swear in swearWords):
+        channel = bot.get_channel(teachers_lounge)
+        await channel.send(message.author.name + " (" + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + "): " + message.content )
+        await message.delete()
+        response = "Please, do not use vulgar language.\nಠ_ಠ"
+        await message.channel.send(response)
+
     try:
         await bot.process_commands(message)
     except:
@@ -229,12 +261,18 @@ async def on_message(message):
 
 @bot.event
 async def on_ready():
-
+    setSwearWordList()
     print('{client.user} has connected to Discord!')
 
 def findWholeWord(w, input_str):
     return re.match(r'\b({0})\b'.format(w), input_str)
     #pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
+
+def setSwearWordList():
+    parent_location = Path(__file__).absolute().parent
+    file_location = parent_location / 'swearWords.txt'
+    file = open(file_location)
+    swearWords = [line.rstrip('\n') for line in file]
 
 @tasks.loop(seconds=1)
 async def once_a_second():
