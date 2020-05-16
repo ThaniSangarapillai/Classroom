@@ -45,12 +45,6 @@ const routes: Routes = [
         loadChildren: () =>
             import('modules/error/error-routing.module').then(m => m.ErrorRoutingModule),
     },
-    {
-        path: 'manage',
-        pathMatch: 'full',
-        loadChildren: () =>
-            import('modules/management/error-routing.module').then(m => m.ErrorRoutingModule),
-    },
 ];
 
 @NgModule({
