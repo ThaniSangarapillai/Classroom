@@ -249,6 +249,8 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+
+
 async def clean_reminders(ctx):
     global credentials
     email = credentials[str(ctx.guild.name)]["email"]
@@ -278,6 +280,10 @@ async def refresh_reminders(ctx):
 async def currentreminders(ctx, *args):
     text = ""
     i = 0
+
+    if ctx.guild not in reminders:
+        await ctx.send("There are no reminders.")
+        return
 
     guild_reminders = reminders[ctx.guild]
     for reminder in guild_reminders:
