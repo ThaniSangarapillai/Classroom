@@ -28,7 +28,7 @@ export class DashboardService {
             email: 'thanigajan@gmail.com',
         });
     }
-    hide_tables() {
-        this.tables.hide();
-    }
+    // hide_tables() {
+    //     this.tables.hide();
+    // }
 }

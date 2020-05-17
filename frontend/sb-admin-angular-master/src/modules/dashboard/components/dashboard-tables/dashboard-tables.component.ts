@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'sb-dashboard-tables',
@@ -10,8 +11,8 @@ export class DashboardTablesComponent implements OnInit {
     constructor(private _https: HttpClient) {}
     ngOnInit() {}
 
-    hide() {
-        const table = document.getElementById('dashTable') as HTMLFormElement;
-        table.hidden = true;
-    }
+    // hide() {
+    //     const table = document.getElementById('dashTable') as HTMLFormElement;
+    //     table.hidden = true;
+    // }
 }
