@@ -455,7 +455,7 @@ async def currentreminders(ctx, *args):
     print(reminders)
 
 
-    if ctx.guild not in reminders:
+    if str(ctx.guild.name) not in reminders:
         await ctx.send("There are no reminders.")
         return
 
