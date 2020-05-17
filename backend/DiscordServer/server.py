@@ -46,6 +46,7 @@ attendance_heres = {}  # map from guild to list
 
 reminders = {}
 
+credentials = {}
 groups = {}
 email = ""
 name = ""
@@ -103,7 +104,7 @@ async def setup(ctx, *args):
     await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value, overwrites_teachers_lounge)
 
 
-    global discord_name, email, user, password
+    global discord_name, email, user, password, credentials
     # try:
     if args[0] == None:
         await ctx.send("Please enter the email address associated with your account to link your account.")
@@ -119,8 +120,10 @@ async def setup(ctx, *args):
         classroom_obj = x.json()[0]
         discord_name = str(ctx.message.author)
         email = args[0]
+
+        credentials[str(guild.name)] = {"email": email, "discord_name":discord_name}
         print(classroom_obj)
-        setSwearWordList()
+        setSwearWordList(str(guild.name))
 
 
 # @bot.command(name="initialize")
@@ -182,6 +185,24 @@ async def list(ctx, *args):
     await ctx.send(text)
 
 
+async  def update_attendance(ctx, student_list):
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/add/attendance/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email, "student_list": student_list},
+                      auth=(user, password), headers=headers)
+    if x.status_code == 200:
+        text = ""
+        for y in x.json()["unregistered"]:
+            for member in ctx.guild.members:
+                print(member.name)
+                if member.name == y.split('#')[0]:
+                    text += "{}, you currently have the Student role, but you are not registered. Maybe ask the teacher?\n".format(member.mention)
+
+        await ctx.send(text)
+
 async def take_attendance(ctx, requested_time, requested_endtime):
     await asyncio.sleep(requested_time)
 
@@ -205,6 +226,9 @@ async def take_attendance(ctx, requested_time, requested_endtime):
             student_list += [{"discord_name": str(student), "presence": presence}]
 
         print(student_list)
+        await update_attendance(ctx, student_list)
+
+
 
 @bot.command(name='attendance')
 async def attendance(ctx, *args):
@@ -226,12 +250,44 @@ async def attendance(ctx, *args):
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
 
+
+async def clean_reminders(ctx):
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/remove/reminders/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email},
+                      auth=(user, password), headers=headers)
+
+async def refresh_reminders(ctx):
+    global credentials, reminders
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/reminders/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email},
+                      auth=(user, password), headers=headers)
+
+    reminders[str(ctx.guild.name)] = []
+    if x.status_code == 200:
+        for y in x.json():
+            (datetime, message) = y.values()
+            reminders[str(ctx.guild.name)].append((datetime, message))
+
+
 @bot.command(name="currentreminders")
 async def currentreminders(ctx, *args):
     text = ""
     i = 0
+    print(reminders)
+
+    if ctx.guild not in reminders:
+        await ctx.send("There are no reminders.")
+        return
 
     guild_reminders = reminders[ctx.guild]
+    print(guild_reminders)
     for reminder in guild_reminders:
         (datetime, message) = reminder
         text += str(i) + ":"
@@ -245,17 +301,33 @@ async def currentreminders(ctx, *args):
 
 @bot.command(name='reminder')
 async def reminder(ctx, *args):
+    global credentials, reminders
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+
     # try:
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
     print(time)
 
-    global reminders
-    if ctx.guild in reminders:
-        reminders[ctx.guild] += [(time, args[2])]
+    url = 'http://34.125.57.52/add/reminder/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email,
+                                 "reminder": {"date_time": str(time), "text": args[2]}},
+                      auth=(user, password), headers=headers)
+
+    if x.status_code == 200:
+        global reminders
+        if ctx.guild in reminders:
+            reminders[ctx.guild] += [(time, args[2])]
+        else:
+            reminders[ctx.guild] = [(time, args[2])]
+        await ctx.send("A reminder has been added.")
     else:
-        reminders[ctx.guild] = [(time, args[2])]
-    await ctx.send("A reminder has been added.")
-    print(reminders)
+        await ctx.send("Error.")
+
+
+
+    #print(reminders)
     # except:
     #     usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
     #     await ctx.send(usage_text)
@@ -264,14 +336,30 @@ async def reminder(ctx, *args):
 
 @bot.command(name='removereminder')
 async def removereminder(ctx, *args):
+    global credentials, reminders
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+
+
     try:
         index = int(args[0])
         global reminders
         guildreminders = reminders[ctx.guild]
         toremove = guildreminders[index]
-        guildreminders.pop(index)
+
 
         (datetime, message) = toremove
+
+        url = 'http://34.125.57.52/remove/reminder/'
+        headers = {'content-type': 'application/json'}
+        x = requests.post(url, json={"discord_name": discord_name, "email": email,
+                                     "pk": index},
+                          auth=(user, password), headers=headers)
+
+        if x.status_code != 200:
+            raise Exception
+
+        guildreminders.pop(index)
         text = str(index) + ":"
         text += " " + str(datetime)
         text += " " + "\"" + message + "\""
@@ -349,6 +437,9 @@ async def group(ctx, *args):
 # @commands.has_role('Teacher')
 async def filter(ctx, *args):
     global swearWords
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
     print(args)
 
     if (len(args) == 0):
@@ -362,7 +453,7 @@ async def filter(ctx, *args):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
                               auth=(user, password), headers=headers)
-            setSwearWordList()
+            setSwearWordList(ctx.guild.name)
             response = "This word has now been added to the filter."
     elif (args[0].lower() == "remove"):
         if (args[1] in swearWords):
@@ -370,7 +461,7 @@ async def filter(ctx, *args):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
                               auth=(user, password), headers=headers)
-            setSwearWordList()
+            setSwearWordList(ctx.guild.name)
             response = "This word has been removed from the filer."
         else:
             response = "This word is not part of the filter."
@@ -422,8 +513,10 @@ def findWholeWord(w, input_str):
     # pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 
-def setSwearWordList():
-    global swearWords, discord_name, email, user, password
+def setSwearWordList(guild_name):
+    global swearWords,credentials, user, password
+    email = credentials[guild_name]["email"]
+    discord_name = credentials[guild_name]["discord_name"]
     url = 'http://34.125.57.52/filterwords/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
