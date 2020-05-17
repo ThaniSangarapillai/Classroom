@@ -608,6 +608,20 @@ async def processsubmission(bot, message):
     else:
         (target_guild, target_assignment) = assignment_submission_focus[message.author]
 
+    try:
+        duedatetime = assignments[target_guild][target_assignment]
+    except:
+        await message.channel.send("Something went wrong")
+        return
+
+    currentdatetime = datetime.datetime.now()
+    print(currentdatetime, duedatetime)
+
+    if duedatetime < currentdatetime:
+        print("already due!")
+        await message.channel.send(target_assignment + " is already due. Shame on you!")
+        return
+
     if not os.path.exists(str('assignments')):
         os.makedirs('assignments')
 
@@ -696,6 +710,7 @@ async def once_a_second():
     currentdatetime = datetime.datetime.now()
 
     for guild in reminders:
+        # reminders
         remove_reminders = []
 
         for reminder in reminders[guild]:
@@ -708,7 +723,6 @@ async def once_a_second():
                 await channel.send(message)
 
         reminders[guild] = [r for r in reminders[guild] if r not in remove_reminders]
-
 
 
 @once_a_second.before_loop
