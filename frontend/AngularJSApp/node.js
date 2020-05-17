@@ -16,4 +16,4 @@ app.use(function (req, res, next) {
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/html/index.html');
 });
-app.listen(8080);
+app.listen(80);
