@@ -10,6 +10,6 @@
     </sb-dashboard-tables>
     <button (click)="getPosts()">Get Posts</button>
     <div *ngFor="let post of posts | async">
-        {{ post | json }}
+        {{ post }}
     </div>
 </sb-layout-dashboard>
