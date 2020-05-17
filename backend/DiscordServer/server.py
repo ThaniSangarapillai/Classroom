@@ -24,14 +24,18 @@ from enum import Enum
 
 # all required roles that should be present at all times go here
 class Roles(Enum):
+    ADMIN = "Admin"
     TEACHER = "Teacher"
     STUDENT = "Student"
 
 
 # all required text channels that should be present at all times go here
 class TextChannels(Enum):
+    ANNOUNCEMENTS = "announcements"
     REMINDERS = "reminders"
     TEACHERS_LOUNGE = "teachers-lounge"
+    HOMEWORK = "homework"
+    DISCUSSION = "discussion"
 
 
 load_dotenv()
@@ -91,16 +95,18 @@ async def getMembersOfRole(guild, role_name):
 
 
 @bot.command(name="setup")
-@commands.has_role('Admin')
 async def setup(ctx, *args):
     global setup_flag
     setup_flag[ctx.guild] = True
 
     guild = ctx.guild
+    await getRole(guild, Roles.ADMIN.value, 0xffffff)
     await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
     await getRole(guild, Roles.TEACHER.value, 0xff4af9)
-    await getRole(guild, Roles.TA.value, 0x3bffef)
+    await getChannel(guild, TextChannels.ANNOUNCEMENTS.value)
     await getChannel(guild, TextChannels.REMINDERS.value)
+    await getChannel(guild, TextChannels.HOMEWORK.value)
+    await getChannel(guild, TextChannels.DISCUSSION.value)
 
     student_role = get(guild.roles, name=Roles.STUDENT.value)
     teacher_role = get(guild.roles, name=Roles.TEACHER.value)
@@ -613,7 +619,9 @@ async def processsubmission(bot, message):
     # try:
     print("processing submission ", message.attachments)
 
-    if message.author not in assignment_submission_focus:
+    dm_channel = await message.author.create_dm()
+
+    if message.author not in assignment_submission_focus or message.channel != dm_channel:
         print("this user did not intend to submit an assignment.")
         return
     else:
@@ -680,7 +688,7 @@ async def on_message(message):
         await processsubmission(bot, message)
 
     if message.guild not in setup_flag or not setup_flag[message.guild]:
-        if message.content[0] == '!':
+        if len(message.content) > 0 and message.content[0] == '!':
             if message.content.split(" ")[0] != "!setup":
                 await message.channel.send("This bot neets setting up. Use \n!setup email")
                 return
