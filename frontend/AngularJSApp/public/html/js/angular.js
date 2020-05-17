@@ -35,8 +35,6 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('studentController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-    console.log("hi");
-
     $scope.students = []
     $scope.student = {}
 
@@ -85,8 +83,6 @@ app.controller('studentController', ['$scope', '$http', '$location', function ($
 }]);
 
 app.controller('wordController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-    console.log("hi");
-
     $scope.words = []
     $scope.word = {}
 
@@ -145,6 +141,28 @@ app.controller('wordController', ['$scope', '$http', '$location', function ($sco
                 }
             })
     }
+
+    $scope.update();
+}]);
+
+app.controller('profileController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    $scope.update = function () {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/filterwords/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.words = response.data
+                    console.log(response.data)
+                }
+            });
+    };
 
     $scope.update();
 }]);

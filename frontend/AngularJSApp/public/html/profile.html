@@ -8,16 +8,13 @@
 <link href="css/style.css" rel="stylesheet">
 <!-- color CSS -->
 <link href="css/colors/default.css" id="theme" rel="stylesheet">
-<div id="page-wrapper">
+<div id="page-wrapper" ng-controller="profileController">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Profile page</h4>
             </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
-                    class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade
-                    to Pro</a>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">                
                 <ol class="breadcrumb">
                     <li><a href="#">Dashboard</a></li>
                     <li class="active">Profile Page</li>
@@ -40,7 +37,7 @@
                         </div>
                     </div>
                     <div class="user-btm-box">
-                        <div class="col-md-4 col-sm-4 text-center">
+                        <!-- <div class="col-md-4 col-sm-4 text-center">
                             <p class="text-purple"><i class="ti-facebook"></i></p>
                             <h1>258</h1>
                         </div>
@@ -51,7 +48,7 @@
                         <div class="col-md-4 col-sm-4 text-center">
                             <p class="text-danger"><i class="ti-dribbble"></i></p>
                             <h1>556</h1>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -78,18 +75,24 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Phone No</label>
+                            <label class="col-md-12">Discord Name</label>
                             <div class="col-md-12">
-                                <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                                <input type="text" placeholder="Thani#4847" class="form-control form-control-line">
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-12">Server Invite</label>
+                            <div class="col-md-12">
+                                <input type="text" placeholder="https://discord.gg/w3KNtXq" class="form-control form-control-line">
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
                             <label class="col-md-12">Message</label>
                             <div class="col-md-12">
                                 <textarea rows="5" class="form-control form-control-line"></textarea>
                             </div>
-                        </div>
-                        <div class="form-group">
+                        </div> -->
+                        <!-- <div class="form-group">
                             <label class="col-sm-12">Select Country</label>
                             <div class="col-sm-12">
                                 <select class="form-control form-control-line">
@@ -100,10 +103,15 @@
                                     <option>Thailand</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <button class="btn btn-success">Update Profile</button>
+                            </div>
+                            <div class="col-sm-12">
+                                <a href="https://discord.com/api/oauth2/authorize?client_id=711003085694304326&permissions=8&scope=bot" target="_blank">
+                                    <button class="btn btn-success" rel="noopener noreferrer">Add Bot to Server</button>
+                                </a>                                 
                             </div>
                         </div>
                     </form>
