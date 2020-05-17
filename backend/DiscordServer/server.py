@@ -199,7 +199,7 @@ async  def update_attendance(ctx, student_list):
             for member in ctx.guild.members:
                 print(member.name)
                 if member.name == y.split('#')[0]:
-                    text += "{}\n".format(member.mention)
+                    text += "{}, you currently have the Student role, but you are not registered. Maybe ask the teacher?\n".format(member.mention)
 
         await ctx.send(text)
 
@@ -249,6 +249,30 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+async def clean_reminders(ctx):
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/remove/reminders/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email},
+                      auth=(user, password), headers=headers)
+
+async def refresh_reminders(ctx):
+    global credentials, reminders
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/reminders/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email},
+                      auth=(user, password), headers=headers)
+
+    reminders[str(ctx.guild.name)] = []
+    if x.status_code == 200:
+        for y in x.json():
+            (datetime, message) = y.values()
+            reminders[str(ctx.guild.name)].append((datetime, message))
+
 
 @bot.command(name="currentreminders")
 async def currentreminders(ctx, *args):
@@ -269,17 +293,33 @@ async def currentreminders(ctx, *args):
 
 @bot.command(name='reminder')
 async def reminder(ctx, *args):
+    global credentials, reminders
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+
     # try:
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
     print(time)
 
-    global reminders
-    if ctx.guild in reminders:
-        reminders[ctx.guild] += [(time, args[2])]
+    url = 'http://34.125.57.52/add/reminder/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email,
+                                 "reminder": {"date_time": time, "text": args[2]}},
+                      auth=(user, password), headers=headers)
+
+    if x.status_code == 200:
+        global reminders
+        if ctx.guild in reminders:
+            reminders[ctx.guild] += [(time, args[2])]
+        else:
+            reminders[ctx.guild] = [(time, args[2])]
+        await ctx.send("A reminder has been added.")
     else:
-        reminders[ctx.guild] = [(time, args[2])]
-    await ctx.send("A reminder has been added.")
-    print(reminders)
+        await ctx.send("Error.")
+
+
+
+    #print(reminders)
     # except:
     #     usage_text = "Usage:\n!reminder dd/mm/yyyy hh:mm:ss \"message\""
     #     await ctx.send(usage_text)
@@ -288,14 +328,30 @@ async def reminder(ctx, *args):
 
 @bot.command(name='removereminder')
 async def removereminder(ctx, *args):
+    global credentials, reminders
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+
+
     try:
         index = int(args[0])
         global reminders
         guildreminders = reminders[ctx.guild]
         toremove = guildreminders[index]
-        guildreminders.pop(index)
+
 
         (datetime, message) = toremove
+
+        url = 'http://34.125.57.52/remove/reminder/'
+        headers = {'content-type': 'application/json'}
+        x = requests.post(url, json={"discord_name": discord_name, "email": email,
+                                     "pk": index},
+                          auth=(user, password), headers=headers)
+
+        if x.status_code != 200:
+            raise Exception
+
+        guildreminders.pop(index)
         text = str(index) + ":"
         text += " " + str(datetime)
         text += " " + "\"" + message + "\""

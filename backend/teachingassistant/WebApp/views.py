@@ -186,7 +186,7 @@ def reminders(request):
             snippets = Classroom.objects.filter(discord_name=data["discord_name"], email=data["email"])
             serializer = ClassroomSerializer(snippets, many=True)
             if serializer.data != []:
-                return JsonResponse(serializer.data[0]["reminders   "], safe=False)
+                return JsonResponse(serializer.data[0]["reminders"], safe=False)
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -383,7 +383,8 @@ def attendance_bulk(request):
                         name = y.name
                         break
                 else:
-                    unregistered.append(x["discord_name"])
+                    if x["presence"]:
+                        unregistered.append(x["discord_name"])
                     continue
 
                 temp_stud = AttendanceEntry(name=name,**x)
@@ -416,6 +417,68 @@ def modify_attendance(request):
                     for y in x.student_list:
                         if y.name == data["student"]["name"] and y.discord_name == data["student"]["discord_name"]:
                             y.presence = data["student"]["presence"]
+            snippets.save()
+            print(snippets)
+            return JsonResponse({}, status=status.HTTP_200_OK)
+
+    return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+def add_reminder(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        if "discord_name" in data and "email" in data:
+            snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
+            data["reminder"]["date_time"] = datetime.datetime.strptime(data["reminder"]["date_time"], '%Y-%m-%d %H:%M:%S')
+            temp_stud = Reminder(**data["reminder"])
+            snippets.reminders.append(temp_stud)
+            snippets.save()
+            print(snippets)
+            return JsonResponse({}, status=status.HTTP_200_OK)
+
+    return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+def modify_reminder(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        if "discord_name" in data and "email" in data:
+            snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
+            data["reminder"]["date_time"] = datetime.datetime.strptime(data["reminder"]["date_time"],
+                                                                       '%Y-%m-%d %H:%M:%S')
+            snippets.reminders[data["reminder"]["pk"]] = Reminder(**data["reminder"])
+            snippets.save()
+            print(snippets)
+            return JsonResponse({}, status=status.HTTP_200_OK)
+
+    return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+def clean_reminders(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        if "discord_name" in data and "email" in data:
+            snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
+            for x in list(snippets.reminders):
+                if datetime.datetime.now() > x.date_time:
+                    snippets.reminders.remove(x)
+            snippets.save()
+            print(snippets)
+            return JsonResponse({}, status=status.HTTP_200_OK)
+
+    return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+def remove_reminder(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        if "discord_name" in data and "email" in data:
+            snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
+            #temp_stud = Reminder(**data["reminder"])
+            # for x in list(snippets.reminders):
+            #     if x.date_time == temp_stud.date_time and x.text == temp_stud.text:
+            #         snippets.reminders.remove(x)
+            del snippets.reminders[data["pk"]]
             snippets.save()
             print(snippets)
             return JsonResponse({}, status=status.HTTP_200_OK)
