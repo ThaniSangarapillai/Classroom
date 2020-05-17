@@ -1,0 +1,80 @@
+<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Menu CSS -->
+<link href="../plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+<!-- animation CSS -->
+<link href="css/animate.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="css/style.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<!-- color CSS -->
+<link href="css/colors/default.css" id="theme" rel="stylesheet">
+
+<!-- ============================================================== -->
+<!-- End Left Sidebar -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Page Content -->
+<!-- ============================================================== -->
+<div id="page-wrapper" ng-controller="assignmentController">
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Reminders Table</h4>
+            </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
+                    class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade
+                    to Pro
+
+                </a>
+                <ol class="breadcrumb">
+                    <li><a href="#">Dashboard</a></li>
+                    <li class="active">Reminders Table</li>
+                </ol>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="white-box">
+                    <h1 class="box-title">Reminders</h1>
+                    <!-- <p class="text-muted">Add class <code>.table</code></p> -->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in reminders">
+                                    <td><p>{{ $index }}</p></td>
+                                    <td><p ng-show="!buttonHide">{{ x.text }}</p><input ng-show="buttonHide" type="text" ng-model="x.text"></td>
+                                    <td><p ng-show="!buttonHide">{{ x.date_time }}</p><input ng-show="buttonHide" type="text" ng-model="x.date_time"></td>
+                                    <td><button class="deleteButton" ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button class="deleteButton" ng-click="modify(x.text, x.date_time, $index)" ng-show="buttonHide">Set</button></td>
+                                    <td><button class="deleteButton" ng-click="delete($index)">Delete</button></td>  
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="1"><input type="text" ng-model="reminder.text"></td>
+                                    <td colspan="1"><input type="text" ng-model="reminder.date_time"></td>
+                                    <td></td>
+                                    <td><button class="deleteButton" ng-click="add(reminder.text, reminder.date_time)">Add</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+    <!-- <footer class="footer text-center"> 2017 &copy; Ample Admin brought to you by wrappixel.com</footer> -->
+</div>
+<!-- /#page-wrapper -->
