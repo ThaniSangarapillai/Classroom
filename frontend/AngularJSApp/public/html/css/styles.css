@@ -1,0 +1,17 @@
+td {
+    text-align: center;
+}
+
+td input[type=text] {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.deleteButton {
+    border-radius: 5px;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgb(250, 249, 249);
+}

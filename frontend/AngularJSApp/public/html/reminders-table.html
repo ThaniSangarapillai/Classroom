@@ -5,6 +5,7 @@
 <link href="css/animate.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="css/style.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
 <!-- color CSS -->
 <link href="css/colors/default.css" id="theme" rel="stylesheet">
 
@@ -18,7 +19,7 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Basic Table</h4>
+                <h4 class="page-title">Reminders Table</h4>
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
@@ -28,7 +29,7 @@
                 </a>
                 <ol class="breadcrumb">
                     <li><a href="#">Dashboard</a></li>
-                    <li class="active">Basic Table</li>
+                    <li class="active">Reminders Table</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -37,7 +38,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
-                    <h3 class="box-title">Basic Table</h3>
+                    <h1 class="box-title">Reminders</h1>
                     <!-- <p class="text-muted">Add class <code>.table</code></p> -->
                     <div class="table-responsive">
                         <table class="table">
@@ -55,15 +56,15 @@
                                     <td><p>{{ $index }}</p></td>
                                     <td><p ng-show="!buttonHide">{{ x.text }}</p><input ng-show="buttonHide" type="text" ng-model="x.text"></td>
                                     <td><p ng-show="!buttonHide">{{ x.date_time }}</p><input ng-show="buttonHide" type="text" ng-model="x.date_time"></td>
-                                    <td><button ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button ng-click="modify(x.text, x.date_time, $index)" ng-show="buttonHide">Set</button></td>
-                                    <td><button ng-click="delete($index)">Delete</button></td>  
+                                    <td><button class="deleteButton" ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button class="deleteButton" ng-click="modify(x.text, x.date_time, $index)" ng-show="buttonHide">Set</button></td>
+                                    <td><button class="deleteButton" ng-click="delete($index)">Delete</button></td>  
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="1"><input type="text" ng-model="reminder.text"></td>
-                                    <td colspan="2"><input type="text" ng-model="reminder.date_time"></td>
-                                    
-                                    <td><button ng-click="add(reminder.text, reminder.date_time)">Add</button></td>
+                                    <td colspan="1"><input type="text" ng-model="reminder.date_time"></td>
+                                    <td></td>
+                                    <td><button class="deleteButton" ng-click="add(reminder.text, reminder.date_time)">Add</button></td>
                                 </tr>
                             </tbody>
                         </table>

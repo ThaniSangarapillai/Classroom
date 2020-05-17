@@ -5,6 +5,7 @@
 <link href="css/animate.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="css/style.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
 <!-- color CSS -->
 <link href="css/colors/default.css" id="theme" rel="stylesheet">
 
@@ -49,13 +50,13 @@
                                     <td>{{ $index }}</td>
                                     <td>{{ x.word }}</td>
                                     <td>{{ x.created }}</td>
-                                    <td><button ng-click="delete(x.word)">Delete</button></td>
+                                    <td><button  class="deleteButton" ng-click="delete(x.word)">Delete</button></td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td><input type="text" ng-model="word.word"></td>
                                     <td></td>
-                                    <td><button ng-click="add(word.word)">Add</button></td>
+                                    <td><button class="deleteButton" ng-click="add(word.word)">Add</button></td>
                                 </tr>
                             </tbody>
                         </table>
