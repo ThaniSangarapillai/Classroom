@@ -130,7 +130,7 @@ async def setup(ctx, *args):
         print("regecx error")
         await ctx.send("Please enter the email address associated with your account to link your account.")
     else:
-        url = 'http://34.125.57.52/verify/'
+        url = 'https://djangobackend-276109.df.r.appspot.com/verify/'
         myobj = [{'discord_name': 'Thani4847'}]
         headers = {'content-type': 'application/json'}
         x = requests.post(url, json={"discord_name": str(ctx.message.author), "email": args[0]},
@@ -206,7 +206,7 @@ async  def update_attendance(ctx, student_list):
     global credentials
     email = credentials[str(ctx.guild.name)]["email"]
     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    url = 'http://34.125.57.52/add/attendance/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/add/attendance/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email, "student_list": student_list},
                       auth=(user, password), headers=headers)
@@ -274,7 +274,7 @@ async def assignment(ctx, *args):
     global credentials
     email = credentials[str(ctx.guild.name)]["email"]
     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    url = 'http://34.125.57.52/add/assn/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/add/assn/'
     headers = {'content-type': 'application/json'}
 
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
@@ -326,7 +326,7 @@ async def removeassignment(ctx, *args):
     global credentials
     email = credentials[str(ctx.guild.name)]["email"]
     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    url = 'http://34.125.57.52/remove/assn/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/remove/assn/'
     headers = {'content-type': 'application/json'}
 
     x = requests.post(url, json={"discord_name": discord_name, "email": email,
@@ -340,7 +340,7 @@ async def refresh_assn(ctx):
     global credentials
     email = credentials[str(ctx.guild.name)]["email"]
     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    url = 'http://34.125.57.52/assignments/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/assignments/'
     headers = {'content-type': 'application/json'}
 
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
@@ -425,7 +425,7 @@ async def clean_reminders(ctx):
     global credentials
     email = credentials[str(ctx.guild.name)]["email"]
     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    url = 'http://34.125.57.52/remove/reminders/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/remove/reminders/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
                       auth=(user, password), headers=headers)
@@ -434,7 +434,7 @@ async def refresh_reminders(ctx):
     global credentials, reminders
     email = credentials[str(ctx.guild.name)]["email"]
     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    url = 'http://34.125.57.52/reminders/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/reminders/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
                       auth=(user, password), headers=headers)
@@ -481,7 +481,7 @@ async def reminder(ctx, *args):
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
     print(time)
 
-    url = 'http://34.125.57.52/add/reminder/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/add/reminder/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email,
                                  "reminder": {"date_time": str(time), "text": args[2]}},
@@ -523,7 +523,7 @@ async def removereminder(ctx, *args):
 
         (date, message) = toremove
 
-        url = 'http://34.125.57.52/remove/reminder/'
+        url = 'https://djangobackend-276109.df.r.appspot.com/remove/reminder/'
         headers = {'content-type': 'application/json'}
         x = requests.post(url, json={"discord_name": discord_name, "email": email,
                                      "pk": index},
@@ -607,41 +607,41 @@ async def group(ctx, *args):
         pass
 
 
-# @bot.command(name='filter')
-# # @commands.has_role('Teacher')
-# async def filter(ctx, *args):
-#     global swearWords
-#     global credentials
-#     email = credentials[str(ctx.guild.name)]["email"]
-#     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-#     print(args)
-#
-#     if (len(args) == 0):
-#         response = '\n'.join(swearWords)
-#     elif (args[0].lower() == "add"):
-#         print("hello")
-#         if (args[1] in swearWords):
-#             response = "This word is already being filtered."
-#         else:
-#             url = 'http://34.125.57.52/add/word/'
-#             headers = {'content-type': 'application/json'}
-#             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
-#                               auth=(user, password), headers=headers)
-#             setSwearWordList(ctx.guild.name)
-#             response = "This word has now been added to the filter."
-#     elif (args[0].lower() == "remove"):
-#         if (args[1] in swearWords):
-#             url = 'http://34.125.57.52/remove/word/'
-#             headers = {'content-type': 'application/json'}
-#             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
-#                               auth=(user, password), headers=headers)
-#             setSwearWordList(ctx.guild.name)
-#             response = "This word has been removed from the filer."
-#         else:
-#             response = "This word is not part of the filter."
-#
-#
-#     await ctx.send(response)
+@bot.command(name='filter')
+# @commands.has_role('Teacher')
+async def filter(ctx, *args):
+    global swearWords
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    print(args)
+
+    if (len(args) == 0):
+        response = '\n'.join(swearWords)
+    elif (args[0].lower() == "add"):
+        print("hello")
+        if (args[1] in swearWords):
+            response = "This word is already being filtered."
+        else:
+            url = 'https://djangobackend-276109.df.r.appspot.com/add/word/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
+                              auth=(user, password), headers=headers)
+            setSwearWordList(ctx.guild.name)
+            response = "This word has now been added to the filter."
+    elif (args[0].lower() == "remove"):
+        if (args[1] in swearWords):
+            url = 'https://djangobackend-276109.df.r.appspot.com/remove/word/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
+                              auth=(user, password), headers=headers)
+            setSwearWordList(ctx.guild.name)
+            response = "This word has been removed from the filer."
+        else:
+            response = "This word is not part of the filter."
+
+
+    await ctx.send(response)
 
 
 @bot.event
@@ -747,7 +747,7 @@ def setSwearWordList(guild_name):
     global swearWords,credentials, user, password
     email = credentials[guild_name]["email"]
     discord_name = credentials[guild_name]["discord_name"]
-    url = 'http://34.125.57.52/filterwords/'
+    url = 'https://djangobackend-276109.df.r.appspot.com/filterwords/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
                       auth=(user, password), headers=headers)
@@ -794,7 +794,7 @@ async def reminderrefresh():
     print("_______EXECUTING____________")
     if credentials != {}:
         for z, s in credentials.items():
-            url = 'http://34.125.57.52/reminders/'
+            url = 'https://djangobackend-276109.df.r.appspot.com/reminders/'
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": s.discord_name, "email": s.email},
                               auth=(user, password), headers=headers)
@@ -805,7 +805,7 @@ async def reminderrefresh():
                     (datetime, message) = y.values()
                     reminders[z].append((datetime, message))
 
-            url = 'http://34.125.57.52/remove/reminders/'
+            url = 'https://djangobackend-276109.df.r.appspot.com/remove/reminders/'
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": s.discord_name, "email": s.email},
                               auth=(user, password), headers=headers)
