@@ -21,6 +21,10 @@ app.config(function ($routeProvider) {
             templateUrl: "/html/basic-table.html",
             controller: "studentController",
         })
+        .when("/word", {
+            templateUrl: "/html/word-table.html",
+            controller: "wordController",
+        })
 
         .when("/reminders", {
             templateUrl: "/html/reminders-table.html",
@@ -36,8 +40,6 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('studentController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-    console.log("hi");
-
     $scope.students = []
     $scope.student = {'name':'', 'discord_name':''}
 
@@ -101,6 +103,91 @@ app.controller('studentController', ['$scope', '$http', '$location', function ($
                 }
             })
     }
+
+    $scope.update();
+}]);
+
+app.controller('wordController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    $scope.words = []
+    $scope.word = {}
+
+    $scope.update = function () {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/filterwords/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.words = response.data
+                    console.log(response.data)
+                } else {
+
+                    console.log("ohno!")
+                }
+            });
+    };
+
+    $scope.delete = function (word) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/remove/word/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "word": {"word": word}},
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.update();
+                }
+            })
+    }
+
+    $scope.add = function (word) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/add/word/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "word": {"word": word}},
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.update();
+                    word = '';
+                }
+            })
+    }
+
+    $scope.update();
+}]);
+
+app.controller('profileController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    $scope.update = function () {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/filterwords/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.words = response.data
+                    console.log(response.data)
+                }
+            });
+    };
 
     $scope.update();
 }]);

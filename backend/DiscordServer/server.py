@@ -14,6 +14,10 @@ import asyncio
 import time
 import json
 from pathlib import Path
+import aiohttp
+import aiofiles
+import os
+import shutil
 # from ..teachingassistant.WebApp import models
 from enum import Enum
 
@@ -38,13 +42,16 @@ password = "X7Mz&&am:&dOhnhk|Oq0$W^MYgkD3V|jgp/1*7{5=I4QLC:HFpC&P+FgL>A*w-F"
 user = "TeachingAssistant"
 classroom_obj = None
 
-bot = commands.Bot(command_prefix=">>")
+bot = commands.Bot(command_prefix="!")
 
 # state
+setup_flag = {}
+
 attendance_flag = {}  # map from guild to bool
 attendance_heres = {}  # map from guild to list
 
 assignments = {}
+assignment_submission_focus = {}  # a map between member and an assignment that they are submitting towards
 
 reminders = {}
 
@@ -86,6 +93,9 @@ async def getMembersOfRole(guild, role_name):
 
 @bot.command(name="setup")
 async def setup(ctx, *args):
+    global setup_flag
+    setup_flag[ctx.guild] = True
+
     guild = ctx.guild
     await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
     await getRole(guild, Roles.TEACHER.value, 0xff4af9)
@@ -269,6 +279,31 @@ async def assignment(ctx, *args):
     print(assignments)
     await ctx.send("An assignment has been created.")
 
+@bot.command(name='removeassignment')
+async def removeassignment(ctx, *args):
+    if len(args) == 0:
+        await ctx.send("Requires an assignment name.")
+        return
+
+    assignment_name = args[0]
+
+    if not ctx.guild in assignments:
+        await ctx.send("There are no assignments in existence.")
+        return
+
+    guildassignments = assignments[ctx.guild]
+
+    if not assignment_name in guildassignments:
+        await ctx.send("The specified assignment doesn't exist. Use !currentassignments to check all assignments.")
+        return
+
+    guildassignments.pop(assignment_name, None)
+
+    if os.path.exists('assignments/' + str(ctx.guild) + '/' + assignment_name):
+        shutil.rmtree('assignments/' + str(ctx.guild) + '/' + assignment_name)
+
+    await ctx.send("Assignment deleted.")
+
 @bot.command(name='currentassignments')
 async def currentassignments(ctx, *args):
     global assignment
@@ -278,19 +313,69 @@ async def currentassignments(ctx, *args):
     else:
         return
 
+    currentdatetime = datetime.datetime.now()
+
     text = ""
     for assignment in guildassignments:
-        text += str(assignment) + ", due " + str(guildassignments[assignment]) + "\n"
+        text += str(assignment) + ", due " + str(guildassignments[assignment])
+        duedatetime = guildassignments[assignment]
+        if duedatetime < currentdatetime:
+            text += " (SUBMISSIONS CLOSED)"
 
+        text += "\n"
     print(text)
     await ctx.send(text)
 
 @bot.command(name='submit')
 async def submit(ctx, *args):
+    if len(args) == 0:
+        await ctx.send("You must provide an assignment name.")
+        return
+
+    if ctx.guild not in assignments or len(assignments[ctx.guild]) == 0:
+        await ctx.send("There are no current assignments.")
+        return
+
+    assignment_name = args[0]
+    if assignment_name not in assignments[ctx.guild]:
+        await ctx.send("Provided an incorrect assignment name.")
+        return
+
+    duedatetime = assignments[ctx.guild][assignment_name]
     currentdatetime = datetime.datetime.now()
+
+    print(currentdatetime, duedatetime)
+
+    if duedatetime < currentdatetime:
+        print("already due!")
+        await ctx.send(assignment_name + " is already due. Shame on you!")
+        return
+
     dm_channel = await ctx.author.create_dm()
-    await dm_channel.send("how dare you send a command.")
+    await dm_channel.send("Submit your assignment here! The latest submission before the due date will be kept.")
+    assignment_submission_focus[ctx.author] = (ctx.guild, assignment_name)
     pass
+
+@bot.command(name='getsubmissions')
+async def getsubmissions(ctx, *args):
+    if len(args) == 0:
+        await ctx.send("Specify an assignment.")
+        return
+
+    assignment_name = args[0]
+    assignment_subpath = 'assignments/' + str(ctx.guild) + '/' + assignment_name
+
+    if not os.path.exists('assignments') or not os.path.exists('assignments/' + str(ctx.guild)) or not os.path.exists(assignment_subpath):
+        await ctx.send("There are no submissions for this assignment.")
+
+    # zip the folder
+    shutil.make_archive(assignment_subpath, 'zip', assignment_subpath)
+
+    zip_path = assignment_subpath + '.zip'
+    file = discord.File(zip_path, filename=assignment_name + '.zip')
+
+    await ctx.send(file=file)
+    os.remove(zip_path)
 
 async def clean_reminders(ctx):
     global credentials
@@ -518,6 +603,51 @@ async def group(ctx, *args):
 #     if isinstance(error, commands.errors.CheckFailure):
 #         await ctx.send("Sorry, only the teacher can use that command.\n¯\_(ツ)_/¯")
 
+async def processsubmission(bot, message):
+    # try:
+    print("processing submission ", message.attachments)
+
+    if message.author not in assignment_submission_focus:
+        print("this user did not intend to submit an assignment.")
+        return
+    else:
+        (target_guild, target_assignment) = assignment_submission_focus[message.author]
+
+    try:
+        duedatetime = assignments[target_guild][target_assignment]
+    except:
+        await message.channel.send("Something went wrong")
+        return
+
+    currentdatetime = datetime.datetime.now()
+    print(currentdatetime, duedatetime)
+
+    if duedatetime < currentdatetime:
+        print("already due!")
+        await message.channel.send(target_assignment + " is already due. Shame on you!")
+        return
+
+    if not os.path.exists(str('assignments')):
+        os.makedirs('assignments')
+
+    if not os.path.exists('assignments/' + str(target_guild)):
+        os.makedirs('assignments/' + str(target_guild))
+
+    assignment_subpath = 'assignments/' + str(target_guild) + '/' + target_assignment
+    if not os.path.exists(assignment_subpath):
+        os.makedirs(assignment_subpath)
+
+    for (i, attachment) in enumerate(message.attachments):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(attachment.url) as resp:
+                if resp.status == 200:
+                    file = await aiofiles.open(assignment_subpath + '/' + str(message.author) + "-" + str(i) + "-" + attachment.filename, mode='wb')
+                    await file.write(await resp.read())
+                    await file.close()
+
+    await message.channel.send("Thanks for the submission.")
+    # except:
+    #     await message.channel.send("Something went wrong. Failed to submit!")
 
 @bot.event
 async def on_message(message):
@@ -539,6 +669,15 @@ async def on_message(message):
         await message.delete()
         response = "Please, do not use vulgar language.\nಠ_ಠ"
         await message.channel.send(response)
+
+    if len(message.attachments) > 0:
+        await processsubmission(bot, message)
+
+    if message.guild not in setup_flag or not setup_flag[message.guild]:
+        if message.content[0] == '!':
+            if message.content.split(" ")[0] != "!setup":
+                await message.channel.send("This bot neets setting up. Use \n!setup email")
+                return
 
     try:
         await bot.process_commands(message)
@@ -582,6 +721,7 @@ async def once_a_second():
     currentdatetime = datetime.datetime.now()
 
     for guild in reminders:
+        # reminders
         remove_reminders = []
 
         for reminder in reminders[guild]:
@@ -594,7 +734,6 @@ async def once_a_second():
                 await channel.send(message)
 
         reminders[guild] = [r for r in reminders[guild] if r not in remove_reminders]
-
 
 
 @once_a_second.before_loop
