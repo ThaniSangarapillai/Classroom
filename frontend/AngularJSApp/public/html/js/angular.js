@@ -87,13 +87,13 @@ app.controller('studentController', ['$scope', '$http', '$location', function ($
 app.controller('wordController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
     console.log("hi");
 
-    $scope.students = []
-    $scope.student = {}
+    $scope.words = []
+    $scope.word = {}
 
     $scope.update = function () {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/students/",
+            url: "http://34.125.57.52/filterwords/",
             data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
             headers: {
                 "Content-Type": "application/json"
@@ -102,7 +102,7 @@ app.controller('wordController', ['$scope', '$http', '$location', function ($sco
             .then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
-                    $scope.students = response.data
+                    $scope.words = response.data
                     console.log(response.data)
                 } else {
 
@@ -111,11 +111,11 @@ app.controller('wordController', ['$scope', '$http', '$location', function ($sco
             });
     };
 
-    $scope.delete = function (name, discord) {
+    $scope.delete = function (word) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/remove/student/",
-            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "student": { "name": name, "discord_name": discord } },
+            url: "http://34.125.57.52/remove/word/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "word": {"word": word}},
             headers: {
                 "Content-Type": "application/json"
             }
@@ -123,10 +123,25 @@ app.controller('wordController', ['$scope', '$http', '$location', function ($sco
             .then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
-                    console.log("woo!")
-                } else {
+                    $scope.update();
+                }
+            })
+    }
 
-                    console.log("ohno!")
+    $scope.add = function (word) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/add/word/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "word": {"word": word}},
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.update();
+                    word = '';
                 }
             })
     }
