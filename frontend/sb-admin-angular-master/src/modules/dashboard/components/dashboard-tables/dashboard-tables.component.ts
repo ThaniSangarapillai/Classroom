@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     styleUrls: ['dashboard-tables.component.scss'],
 })
 export class DashboardTablesComponent implements OnInit {
-    constructor() {}
+    constructor(private _https: HttpClient) {}
     ngOnInit() {}
 
     hide() {
