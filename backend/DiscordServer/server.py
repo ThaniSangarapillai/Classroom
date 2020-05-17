@@ -193,13 +193,12 @@ async  def update_attendance(ctx, student_list):
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email, "student_list": student_list},
                       auth=(user, password), headers=headers)
-    print(x.json(), "hello")
     if x.status_code == 200:
         text = ""
-        print(x.json())
-        for y in x.json().unregistered:
+        for y in x.json()["unregistered"]:
             for member in ctx.guild.members:
-                if member.name == y:
+                print(member.name)
+                if member.name == y.split('#')[0]:
                     text += "{}\n".format(member.mention)
 
         await ctx.send(text)

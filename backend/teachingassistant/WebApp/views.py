@@ -394,7 +394,7 @@ def attendance_bulk(request):
                 else:
                     temp_attend.student_list.append(temp_stud)
 
-            if not change:
+            if not change and len(temp_attend.student_list) != 0:
                 snippets.attendance.append(temp_attend)
             snippets.save()
             print(snippets)
