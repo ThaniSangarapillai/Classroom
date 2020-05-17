@@ -9,5 +9,7 @@ import { DashboardService } from '@modules/dashboard/services/dashboard.service'
 })
 export class DashboardCardsComponent implements OnInit {
     constructor(private _http: DashboardService) {}
-    ngOnInit() {}
+    ngOnInit() {
+        //this._http.hide_tables();
+    }
 }

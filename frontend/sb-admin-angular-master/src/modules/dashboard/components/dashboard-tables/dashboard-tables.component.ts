@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,7 +7,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     styleUrls: ['dashboard-tables.component.scss'],
 })
 export class DashboardTablesComponent implements OnInit {
-    constructor(private _https: HttpClient) {}
+    constructor() {}
     ngOnInit() {}
 
     hide() {
