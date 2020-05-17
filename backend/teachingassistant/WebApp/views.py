@@ -286,15 +286,10 @@ def modify_assignment(request):
         print(data)
         if "discord_name" in data and "email" in data:
             snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
-            change_name = False
-            if "old_name" in data["assignment"]:
-                change_name = True
-            for x in list(snippets.assignments):
-                if not change_name and x.name == data["assignment"]["name"]:
-                    x.duedate = datetime.datetime.strptime(data["assignment"]["duedate"], '%Y-%m-%d %H:%M:%S')
-                elif change_name and x.name == data["assignment"]["old_name"]:
-                    x.name = data["assignment"]["name"]
-                    x.duedate = datetime.datetime.strptime(data["assignment"]["duedate"], '%Y-%m-%d %H:%M:%S')
+
+            name = data["assignment"]["name"]
+            duedate = datetime.datetime.strptime(data["assignment"]["duedate"], '%Y-%m-%d %H:%M:%S')
+            snippets.assignments[data["pk"]] = {"name":name, "duedate":duedate}
             snippets.save()
             print(snippets)
             return JsonResponse({}, status=status.HTTP_200_OK)

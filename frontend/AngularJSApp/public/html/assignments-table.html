@@ -56,15 +56,15 @@
                                     <td><p>{{ $index }}</p></td>
                                     <td><p ng-show="!buttonHide">{{ x.name }}</p><input ng-show="buttonHide" type="text" ng-model="x.name"></td>
                                     <td><p ng-show="!buttonHide">{{ x.duedate }}</p><input ng-show="buttonHide" type="text" ng-model="x.duedate"></td>
-                                    <td><button class="deleteButton" ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button class="deleteButton" ng-click="modify(x.text, x.date_time, $index)" ng-show="buttonHide">Set</button></td>
-                                    <td><button class="deleteButton" ng-click="delete($index)">Delete</button></td>  
+                                    <td><button class="deleteButton" ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button class="deleteButton" ng-click="modify(x.name, x.duedate, $index)" ng-show="buttonHide">Set</button></td>
+                                    <td><button class="deleteButton" ng-click="delete(x.name)">Delete</button></td>  
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td colspan="1"><input type="text" ng-model="reminder.text"></td>
-                                    <td colspan="1"><input type="text" ng-model="reminder.date_time"></td>
+                                    <td colspan="1"><input type="text" ng-model="assignment.name"></td>
+                                    <td colspan="1"><input type="text" ng-model="assignment.duedate"></td>
                                     <td></td>
-                                    <td><button class="deleteButton" ng-click="add(reminder.text, reminder.date_time)">Add</button></td>
+                                    <td><button class="deleteButton" ng-click="add(assignment.name, assignment.duedate)">Add</button></td>
                                 </tr>
                             </tbody>
                         </table>

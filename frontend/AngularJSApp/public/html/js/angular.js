@@ -344,7 +344,7 @@ app.controller('assignmentsController', ['$scope', '$http', '$location', functio
                     $scope.assignments = []
                     for (let x in assignments) {
                         console.log(x)
-                        $scope.assignments.push({"name":assignments[x].text, "duedate": assignments[x].date_time.replace("T", " ").replace("Z","")})
+                        $scope.assignments.push({"name":assignments[x].name, "duedate": assignments[x].duedate.replace("T", " ").replace("Z","")})
                     }
                 } else {
 
@@ -359,8 +359,8 @@ app.controller('assignmentsController', ['$scope', '$http', '$location', functio
     $scope.delete = function (indice) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/remove/assignments/",
-            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "pk": indice },
+            url: "http://34.125.57.52/remove/assn/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "assignment": {"name":indice} },
             headers: {
                 "Content-Type": "application/json"
             }
@@ -376,11 +376,11 @@ app.controller('assignmentsController', ['$scope', '$http', '$location', functio
             })
     }
 
-    $scope.modify = function (text, date_time, indice) {
+    $scope.modify = function (name, duedate, indice) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/modify/assignments/",
-            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "reminder":{"pk": indice, "text":text, "date_time":date_time }},
+            url: "http://34.125.57.52/modify/assn/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "pk": indice, assignment : {"name":name, "duedate":duedate}},
             headers: {
                 "Content-Type": "application/json"
             }
@@ -397,11 +397,11 @@ app.controller('assignmentsController', ['$scope', '$http', '$location', functio
             })
     }
 
-    $scope.add = function (text, date_time) {
+    $scope.add = function (name, duedate) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/add/assignments/",
-            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "reminder":{"text":text, "date_time":date_time } },
+            url: "http://34.125.57.52/add/assn/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "assignment":{"name":name, "duedate":duedate } },
             headers: {
                 "Content-Type": "application/json"
             }

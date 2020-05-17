@@ -211,7 +211,7 @@ async  def update_attendance(ctx, student_list):
     x = requests.post(url, json={"discord_name": discord_name, "email": email, "student_list": student_list},
                       auth=(user, password), headers=headers)
     if x.status_code == 200:
-        text = ""
+        text = "Noted!"
         for y in x.json()["unregistered"]:
             for member in ctx.guild.members:
                 print(member.name)
@@ -271,20 +271,33 @@ async def attendance(ctx, *args):
 @commands.has_role('Teacher')
 async def assignment(ctx, *args):
     global assignments
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/add/assn/'
+    headers = {'content-type': 'application/json'}
+
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
     print(time)
     assignment_name = args[2]
 
-    if ctx.guild in assignments:
-        guildassignments = assignments[ctx.guild]
-    else:
-        assignments[ctx.guild] = {}
-        guildassignments = assignments[ctx.guild]
-
-    guildassignments[assignment_name] = time
-
+    x = requests.post(url, json={"discord_name": discord_name, "email": email, "assignment": {"name":assignment_name, "duedate":time}},
+                      headers=headers)
     print(assignments)
-    await ctx.send("An assignment has been created.")
+    if x.status_code == 200:
+        if ctx.guild in assignments:
+            guildassignments = assignments[ctx.guild]
+        else:
+            assignments[ctx.guild] = {}
+            guildassignments = assignments[ctx.guild]
+
+        guildassignments[assignment_name] = time
+        print(assignments, guildassignments)
+        print(assignments)
+        await ctx.send("An assignment has been created.")
+    else:
+        await ctx.send("Failed")
+
 
 @bot.command(name='removeassignment')
 @commands.has_role('Teacher')
@@ -310,7 +323,28 @@ async def removeassignment(ctx, *args):
     if os.path.exists('assignments/' + str(ctx.guild) + '/' + assignment_name):
         shutil.rmtree('assignments/' + str(ctx.guild) + '/' + assignment_name)
 
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/remove/assn/'
+    headers = {'content-type': 'application/json'}
+
+    x = requests.post(url, json={"discord_name": discord_name, "email": email,
+                                 "assignment": {"name": assignment_name}},
+                      auth=(user, password), headers=headers)
+
     await ctx.send("Assignment deleted.")
+
+
+async def refresh_assn(ctx):
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/assignments/'
+    headers = {'content-type': 'application/json'}
+
+    x = requests.post(url, json={"discord_name": discord_name, "email": email},
+                      auth=(user, password), headers=headers)
 
 @bot.command(name='currentassignments')
 async def currentassignments(ctx, *args):
