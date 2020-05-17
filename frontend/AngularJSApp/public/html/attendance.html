@@ -5,6 +5,7 @@
 <link href="css/animate.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="css/style.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
 <!-- color CSS -->
 <link href="css/colors/default.css" id="theme" rel="stylesheet">
 
@@ -40,29 +41,35 @@
                     <h3 class="box-title">Basic Table</h3>
                     <!-- <p class="text-muted">Add class <code>.table</code></p> -->
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" style="width: 95%;">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Date</th>
-                                    <th>Students Present</th>
-                                    <th></th>
+                                    <th class="left">#</th>
+                                    <th colspan="2">Date</th>
+                                    <th class="right">Student Present</th>
+                                    
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr ng-repeat="x in attendance">
-                                    <td>{{ $index }}</td>
-                                    <td>{{ x.day }}</td>
-                                    <td>{{ x.student_list }}</td>
-                                    <td><button ng-click="delete(x.name, x.discord_name)">Delete</button></td>
+                            <tbody ng-repeat="x in attendance">
+                                <tr class="tabledarker">
+                                    <td class="left">{{ $index }}</td>
+                                    <td colspan="2">{{ x.day }}</td>
+                                    <!-- <td>{{ x.student_list }}</td> -->
+                                    <td class="right"><img src="images/551749-200.png" style="width: 3%;height: auto;" ng-click="drop=!drop"></td>
                                 </tr>
-                                <tr>
+                                <tr ng-repeat="y in x.student_list" ng-show="drop">
+                                    <td class="left">{{ y.name }}</td>
+                                    <td colspan="2">{{ y.discord_name }}</td>
+                                    <!-- <td>{{ x.student_list }}</td> -->
+                                    <td class="right"><input type="checkbox" ng-checked="y.presence"></td>
+                                </tr>
+                                <!-- <tr>
                                     <td></td>
                                     <td><input type="text" ng-model="student.name"></td>
                                     <td><input type="text" ng-model="student.discord_name"></td>
                                     <td></td>
                                     <td><button ng-click="add()">Add</button></td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>

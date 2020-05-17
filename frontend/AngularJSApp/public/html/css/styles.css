@@ -15,3 +15,19 @@ td input[type=text] {
 tbody tr:nth-child(odd) {
     background-color: rgb(250, 249, 249);
 }
+
+.tabledarker {
+    background-color: rgb(250, 249, 249);
+}
+
+.left {
+    width: 30%;
+    text-align: left;
+    margin-left: 20px;
+}
+
+.right {
+    width: 30%;
+    text-align: right;
+    margin-right: 20px;
+}

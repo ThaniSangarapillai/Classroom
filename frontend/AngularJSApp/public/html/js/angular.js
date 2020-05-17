@@ -175,8 +175,12 @@ app.controller('homeController', ['$scope', '$http', '$location', function ($sco
 }]);
 
 app.controller('attendanceController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-    $scope.students = []
-    $scope.student = {}
+    $scope.attendance = []
+    $scope.attendanceEntry = {}
+
+    $scope.toggle = function(bool) {
+        return bool;
+    }; 
 
     $scope.update = function () {
         $http({
@@ -190,7 +194,7 @@ app.controller('attendanceController', ['$scope', '$http', '$location', function
             .then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
-                    $scope.students = response.data
+                    $scope.attendance = response.data
                     console.log(response.data)
                 } else {
 
