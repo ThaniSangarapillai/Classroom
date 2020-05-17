@@ -61,8 +61,9 @@ export class CountryService {
     };
 
     constructor(private pipe: DecimalPipe, private _http: DashboardService) {
-        this._http.getPosts().subscribe(data => {
+        this._http.getData().subscribe(data => {
             this.stuff = data;
+            console.log(this.stuff);
         });
         this._search$
             .pipe(
@@ -80,7 +81,7 @@ export class CountryService {
     }
 
     getData(): Country[] {
-        this._http.getPosts().subscribe(data => {
+        this._http.getData().subscribe(data => {
             this.stuff = data;
         });
         return this.stuff;
@@ -129,6 +130,11 @@ export class CountryService {
         const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
         // 1. sort
+        this._http.getData().subscribe(data => {
+            this.stuff = data;
+            console.log(this.stuff);
+        });
+        console.log(this.stuff);
         let countries = sort(this.stuff, sortColumn, sortDirection);
 
         // 2. filter
