@@ -278,8 +278,9 @@ async def refresh_reminders(ctx):
 async def currentreminders(ctx, *args):
     text = ""
     i = 0
-
+    print(reminders)
     guild_reminders = reminders[ctx.guild]
+    print(guild_reminders)
     for reminder in guild_reminders:
         (datetime, message) = reminder
         text += str(i) + ":"
@@ -304,7 +305,7 @@ async def reminder(ctx, *args):
     url = 'http://34.125.57.52/add/reminder/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email,
-                                 "reminder": {"date_time": time, "text": args[2]}},
+                                 "reminder": {"date_time": str(time), "text": args[2]}},
                       auth=(user, password), headers=headers)
 
     if x.status_code == 200:
