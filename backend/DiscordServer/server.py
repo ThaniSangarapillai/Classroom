@@ -44,6 +44,8 @@ bot = commands.Bot(command_prefix=">>")
 attendance_flag = {}  # map from guild to bool
 attendance_heres = {}  # map from guild to list
 
+assignments = {}
+
 reminders = {}
 
 credentials = {}
@@ -249,7 +251,46 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+@bot.command(name='assignment')
+async def assignment(ctx, *args):
+    global assignments
+    time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
+    print(time)
+    assignment_name = args[2]
 
+    if ctx.guild in assignments:
+        guildassignments = assignments[ctx.guild]
+    else:
+        assignments[ctx.guild] = {}
+        guildassignments = assignments[ctx.guild]
+
+    guildassignments[assignment_name] = time
+
+    print(assignments)
+    await ctx.send("An assignment has been created.")
+
+@bot.command(name='currentassignments')
+async def currentassignments(ctx, *args):
+    global assignment
+
+    if ctx.guild in assignments:
+        guildassignments = assignments[ctx.guild]
+    else:
+        return
+
+    text = ""
+    for assignment in guildassignments:
+        text += str(assignment) + ", due " + str(guildassignments[assignment]) + "\n"
+
+    print(text)
+    await ctx.send(text)
+
+@bot.command(name='submit')
+async def submit(ctx, *args):
+    currentdatetime = datetime.datetime.now()
+    dm_channel = await ctx.author.create_dm()
+    await dm_channel.send("how dare you send a command.")
+    pass
 
 async def clean_reminders(ctx):
     global credentials
@@ -283,7 +324,7 @@ async def currentreminders(ctx, *args):
     text = ""
     i = 0
     print(reminders)
-    
+
 
     if ctx.guild not in reminders:
         await ctx.send("There are no reminders.")
