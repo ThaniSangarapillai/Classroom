@@ -47,6 +47,7 @@ attendance_heres = {}  # map from guild to list
 reminders = {}
 
 groups = []
+credentials = {}
 email = ""
 name = ""
 discord_name = ""
@@ -103,7 +104,7 @@ async def setup(ctx, *args):
     await getChannel(guild, TextChannels.TEACHERS_LOUNGE.value, overwrites_teachers_lounge)
 
 
-    global discord_name, email, user, password
+    global discord_name, email, user, password, credentials
     # try:
     if args[0] == None:
         await ctx.send("Please enter the email address associated with your account to link your account.")
@@ -119,8 +120,10 @@ async def setup(ctx, *args):
         classroom_obj = x.json()[0]
         discord_name = str(ctx.message.author)
         email = args[0]
+
+        credentials[str(guild.name)] = {"email": email, "discord_name":discord_name}
         print(classroom_obj)
-        setSwearWordList()
+        setSwearWordList(str(guild.name))
 
 
 # @bot.command(name="initialize")
@@ -182,6 +185,25 @@ async def list(ctx, *args):
     await ctx.send(text)
 
 
+async  def update_attendance(ctx, student_list):
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+    url = 'http://34.125.57.52/add/attendance/'
+    headers = {'content-type': 'application/json'}
+    x = requests.post(url, json={"discord_name": discord_name, "email": email, "student_list": student_list},
+                      auth=(user, password), headers=headers)
+    print(x.json(), "hello")
+    if x.status_code == 200:
+        text = ""
+        print(x.json())
+        for y in x.json().unregistered:
+            for member in ctx.guild.members:
+                if member.name == y:
+                    text += "{}\n".format(member.mention)
+
+        await ctx.send(text)
+
 async def take_attendance(ctx, requested_time, requested_endtime):
     await asyncio.sleep(requested_time)
 
@@ -205,6 +227,9 @@ async def take_attendance(ctx, requested_time, requested_endtime):
             student_list += [{"discord_name": str(student), "presence": presence}]
 
         print(student_list)
+        await update_attendance(ctx, student_list)
+
+
 
 @bot.command(name='attendance')
 async def attendance(ctx, *args):
@@ -345,6 +370,9 @@ async def group(ctx, *args):
 # @commands.has_role('Teacher')
 async def filter(ctx, *args):
     global swearWords
+    global credentials
+    email = credentials[str(ctx.guild.name)]["email"]
+    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
     print(args)
 
     if (len(args) == 0):
@@ -358,7 +386,7 @@ async def filter(ctx, *args):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
                               auth=(user, password), headers=headers)
-            setSwearWordList()
+            setSwearWordList(ctx.guild.name)
             response = "This word has now been added to the filter."
     elif (args[0].lower() == "remove"):
         if (args[1] in swearWords):
@@ -366,7 +394,7 @@ async def filter(ctx, *args):
             headers = {'content-type': 'application/json'}
             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
                               auth=(user, password), headers=headers)
-            setSwearWordList()
+            setSwearWordList(ctx.guild.name)
             response = "This word has been removed from the filer."
         else:
             response = "This word is not part of the filter."
@@ -418,8 +446,10 @@ def findWholeWord(w, input_str):
     # pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 
-def setSwearWordList():
-    global swearWords, discord_name, email, user, password
+def setSwearWordList(guild_name):
+    global swearWords,credentials, user, password
+    email = credentials[guild_name]["email"]
+    discord_name = credentials[guild_name]["discord_name"]
     url = 'http://34.125.57.52/filterwords/'
     headers = {'content-type': 'application/json'}
     x = requests.post(url, json={"discord_name": discord_name, "email": email},
