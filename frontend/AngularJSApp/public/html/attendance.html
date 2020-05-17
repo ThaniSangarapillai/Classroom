@@ -50,7 +50,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in attendance">
+                                <tr ng-repeat="x in attendances">
                                     <td>{{ $index }}</td>
                                     <td>{{ x.day }}</td>
                                     <td>{{ x.student_list }}</td>
@@ -58,10 +58,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><input type="text" ng-model="student.name"></td>
-                                    <td><input type="text" ng-model="student.discord_name"></td>
-                                    <td></td>
-                                    <td><button ng-click="add()">Add</button></td>
+                                    <td><button ng-click="add()">Take Attendance</button></td>
                                 </tr>
                             </tbody>
                         </table>
