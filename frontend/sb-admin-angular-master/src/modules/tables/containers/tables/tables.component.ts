@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { CountryService } from '@modules/tables/services/country.service';
 
 @Component({
     selector: 'sb-tables',
@@ -7,6 +8,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     styleUrls: ['tables.component.scss'],
 })
 export class TablesComponent implements OnInit {
-    constructor() {}
+    constructor(private country: CountryService) {}
     ngOnInit() {}
 }
