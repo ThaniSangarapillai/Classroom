@@ -61,7 +61,7 @@ export class CountryService {
     };
 
     constructor(private pipe: DecimalPipe, private _http: DashboardService) {
-        this._http.getPosts().subscribe(data => {
+        this._http.getData().subscribe(data => {
             this.stuff = data;
             console.log(this.stuff);
         });
@@ -81,7 +81,7 @@ export class CountryService {
     }
 
     getData(): Country[] {
-        this._http.getPosts().subscribe(data => {
+        this._http.getData().subscribe(data => {
             this.stuff = data;
         });
         return this.stuff;
@@ -130,12 +130,12 @@ export class CountryService {
         const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
         // 1. sort
+        this._http.getData().subscribe(data => {
+            this.stuff = data;
+            console.log(this.stuff);
+        });
+        console.log(this.stuff);
         let countries = sort(this.stuff, sortColumn, sortDirection);
-        if (this._search.caller == null) {
-            console.log('The function was called from the top!');
-        } else {
-            console.log('This function\'s caller was ' + this._search.caller);
-        }
 
         // 2. filter
         countries = countries.filter(country => matches(country, searchTerm, this.pipe));

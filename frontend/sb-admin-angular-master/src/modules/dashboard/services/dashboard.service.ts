@@ -14,14 +14,14 @@ export class DashboardService {
     getDashboard$(): Observable<{}> {
         return of({});
     }
-    getPosts() {
+    getData() {
         const headerOptions = {
             // headers: new HttpHeaders({
             //     'Content-Type': 'application/json',
             //     'Authorization': 'Basic ' + btoa(this.user + ':' + this.pass),
             // })
         };
-        this.posts = this.http.post<Country[]>(this.ROOT_URL + 'students', {
+        this.posts = this.http.post<Country[]>(this.ROOT_URL + 'students/', {
             discord_name: 'Thani#4847',
             email: 'thanigajan@gmail.com',
         });

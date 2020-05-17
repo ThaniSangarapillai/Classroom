@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {}
 
     getData() {
-        this._http.getPosts().subscribe(data => {
+        this._http.getData().subscribe(data => {
             this.stuff = data;
             return this.stuff;
         });
