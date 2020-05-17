@@ -63,6 +63,7 @@ export class CountryService {
     constructor(private pipe: DecimalPipe, private _http: DashboardService) {
         this._http.getPosts().subscribe(data => {
             this.stuff = data;
+            console.log(this.stuff);
         });
         this._search$
             .pipe(
@@ -130,6 +131,11 @@ export class CountryService {
 
         // 1. sort
         let countries = sort(this.stuff, sortColumn, sortDirection);
+        if (this._search.caller == null) {
+            console.log('The function was called from the top!');
+        } else {
+            console.log('This function\'s caller was ' + this._search.caller);
+        }
 
         // 2. filter
         countries = countries.filter(country => matches(country, searchTerm, this.pipe));
