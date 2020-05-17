@@ -21,6 +21,10 @@ app.config(function ($routeProvider) {
             templateUrl: "/html/basic-table.html",
             controller: "studentController",
         })
+        .when("/word", {
+            templateUrl: "/html/word-table.html",
+            controller: "wordController",
+        })
 
         .otherwise({
             redirectTo: '/home'
@@ -31,6 +35,56 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('studentController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    console.log("hi");
+
+    $scope.students = []
+    $scope.student = {}
+
+    $scope.update = function () {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/students/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.students = response.data
+                    console.log(response.data)
+                } else {
+
+                    console.log("ohno!")
+                }
+            });
+    };
+
+    $scope.delete = function (name, discord) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/remove/student/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "student": { "name": name, "discord_name": discord } },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    console.log("woo!")
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+    }
+
+    $scope.update();
+}]);
+
+app.controller('wordController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
     console.log("hi");
 
     $scope.students = []
