@@ -484,3 +484,25 @@ def remove_reminder(request):
             return JsonResponse({}, status=status.HTTP_200_OK)
 
     return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+def initialized(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        if "discord_name" in data and "email" in data:
+            snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
+            return JsonResponse({"initialized":snippets.initialized}, status=status.HTTP_200_OK)
+
+    return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+def initialize(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        if "discord_name" in data and "email" in data:
+            snippets = Classroom.objects.get(discord_name=data["discord_name"], email=data["email"])
+            snippets.initialized = True
+            snippets.save()
+            return JsonResponse({}, status=status.HTTP_200_OK)
+
+    return JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)

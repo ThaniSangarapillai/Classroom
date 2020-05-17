@@ -476,41 +476,41 @@ async def group(ctx, *args):
         pass
 
 
-@bot.command(name='filter')
-# @commands.has_role('Teacher')
-async def filter(ctx, *args):
-    global swearWords
-    global credentials
-    email = credentials[str(ctx.guild.name)]["email"]
-    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    print(args)
-
-    if (len(args) == 0):
-        response = '\n'.join(swearWords)
-    elif (args[0].lower() == "add"):
-        print("hello")
-        if (args[1] in swearWords):
-            response = "This word is already being filtered."
-        else:
-            url = 'http://34.125.57.52/add/word/'
-            headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
-                              auth=(user, password), headers=headers)
-            setSwearWordList(ctx.guild.name)
-            response = "This word has now been added to the filter."
-    elif (args[0].lower() == "remove"):
-        if (args[1] in swearWords):
-            url = 'http://34.125.57.52/remove/word/'
-            headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
-                              auth=(user, password), headers=headers)
-            setSwearWordList(ctx.guild.name)
-            response = "This word has been removed from the filer."
-        else:
-            response = "This word is not part of the filter."
-
-
-    await ctx.send(response)
+# @bot.command(name='filter')
+# # @commands.has_role('Teacher')
+# async def filter(ctx, *args):
+#     global swearWords
+#     global credentials
+#     email = credentials[str(ctx.guild.name)]["email"]
+#     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+#     print(args)
+#
+#     if (len(args) == 0):
+#         response = '\n'.join(swearWords)
+#     elif (args[0].lower() == "add"):
+#         print("hello")
+#         if (args[1] in swearWords):
+#             response = "This word is already being filtered."
+#         else:
+#             url = 'http://34.125.57.52/add/word/'
+#             headers = {'content-type': 'application/json'}
+#             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
+#                               auth=(user, password), headers=headers)
+#             setSwearWordList(ctx.guild.name)
+#             response = "This word has now been added to the filter."
+#     elif (args[0].lower() == "remove"):
+#         if (args[1] in swearWords):
+#             url = 'http://34.125.57.52/remove/word/'
+#             headers = {'content-type': 'application/json'}
+#             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
+#                               auth=(user, password), headers=headers)
+#             setSwearWordList(ctx.guild.name)
+#             response = "This word has been removed from the filer."
+#         else:
+#             response = "This word is not part of the filter."
+#
+#
+#     await ctx.send(response)
 
 
 # @bot.event

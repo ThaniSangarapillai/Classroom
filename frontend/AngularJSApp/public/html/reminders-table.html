@@ -14,7 +14,7 @@
 <!-- ============================================================== -->
 <!-- Page Content -->
 <!-- ============================================================== -->
-<div id="page-wrapper" ng-controller="studentController">
+<div id="page-wrapper" ng-controller="remindersController">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -44,25 +44,26 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th>Username</th>
-                                    <th>Role</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in students">
-                                    <td>{{ $index }}</td>
-                                    <td>{{ x.name }}</td>
-                                    <td>{{ x.discord_name }}</td>
-                                    <td>Student</td>
-                                    <td><button ng-click="delete(x.name, x.discord_name)">Delete</button></td>
+                                <tr ng-repeat="x in reminders">
+                                    <td><p>{{ $index }}</p></td>
+                                    <td><p ng-show="!buttonHide">{{ x.text }}</p><input ng-show="buttonHide" type="text" ng-model="x.text"></td>
+                                    <td><p ng-show="!buttonHide">{{ x.date_time }}</p><input ng-show="buttonHide" type="text" ng-model="x.date_time"></td>
+                                    <td><button ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button ng-click="modify(x.text, x.date_time, $index)" ng-show="buttonHide">Set</button></td>
+                                    <td><button ng-click="delete($index)">Delete</button></td>  
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><input type="text" ng-model="student.name"></td>
-                                    <td colspan="2"><input type="text" ng-model="student.discord_name"></td>
+                                    <td></td>
+                                    <td colspan="1"><input type="text" ng-model="reminder.text"></td>
+                                    <td colspan="2"><input type="text" ng-model="reminder.date_time"></td>
                                     
-                                    <td><button ng-click="add(student.name, student.discord_name)">Add</button></td>
+                                    <td><button ng-click="add(reminder.text, reminder.date_time)">Add</button></td>
                                 </tr>
                             </tbody>
                         </table>

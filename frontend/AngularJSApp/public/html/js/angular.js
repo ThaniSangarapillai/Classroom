@@ -22,6 +22,11 @@ app.config(function ($routeProvider) {
             controller: "studentController",
         })
 
+        .when("/reminders", {
+            templateUrl: "/html/reminders-table.html",
+            controller: "remindersController",
+        })
+
         .otherwise({
             redirectTo: '/home'
         });
@@ -34,7 +39,7 @@ app.controller('studentController', ['$scope', '$http', '$location', function ($
     console.log("hi");
 
     $scope.students = []
-    $scope.student = {}
+    $scope.student = {'name':'', 'discord_name':''}
 
     $scope.update = function () {
         $http({
@@ -77,10 +82,127 @@ app.controller('studentController', ['$scope', '$http', '$location', function ($
             })
     }
 
+    $scope.add = function (name, discord_name) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/add/student/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "student": { "name": name, "discord_name": discord_name } },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.update()
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+    }
+
     $scope.update();
 }]);
 ``
 
+app.controller('remindersController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    console.log("hi");
+
+    $scope.reminders = []
+    $scope.student = {'name':'', 'discord_name':''}
+
+    $scope.update = function () {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/reminders/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    reminders = response.data
+                    $scope.reminders = []
+                    for (let x in reminders) {
+                        console.log(x)
+                        $scope.reminders.push({"text":reminders[x].text, "date_time": reminders[x].date_time.replace("T", " ").replace("Z","")})
+                    }
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+            .then(function () {
+                
+            });
+    };
+
+    $scope.delete = function (indice) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/remove/reminder/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "pk": indice },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.update();
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+    }
+
+    $scope.modify = function (text, date_time, indice) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/modify/reminder/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "reminder":{"pk": indice, "text":text, "date_time":date_time }},
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.buttonHide = false
+                    $scope.update();
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+    }
+
+    $scope.add = function (text, date_time) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/add/reminder/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "reminder":{"text":text, "date_time":date_time } },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.update()
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+    }
+
+    $scope.update();
+}]);
 // var checkRouting = function ($q, $window, $location, $http) {
 //     console.log("HEYO");
 //     var deferred = $q.defer();
