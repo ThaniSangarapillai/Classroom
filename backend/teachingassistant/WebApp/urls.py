@@ -30,4 +30,6 @@ urlpatterns = [
     path('modify/reminder/', views.modify_reminder),
     path('remove/reminder/', views.remove_reminder),
     path('remove/reminders/', views.clean_reminders),
+    path('initialized/', views.initialized),
+    path('initialize/', views.initialize)
 ]

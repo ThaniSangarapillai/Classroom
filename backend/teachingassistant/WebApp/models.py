@@ -44,6 +44,8 @@ class Classroom(models.Model):
     discord_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
 
+    initialized = models.BooleanField(default=False)
+
     students = models.ArrayField(
         model_container=Student
     )

@@ -47,19 +47,19 @@ class ClassroomSerializer(serializers.HyperlinkedModelSerializer):
     reminders = ReminderSerializer(many=True, required=False, read_only=False)
     class Meta:
         model = Classroom
-        fields = ('pk', 'name', 'discord_name', 'email', 'students', 'assignments', 'filter_words', 'attendance', 'reminders')
+        fields = ('pk', 'name', 'discord_name', 'email', 'initialized', 'students', 'assignments', 'filter_words', 'attendance', 'reminders')
 
-    def create(self, validated_data):
-        students = validated_data.pop('students', None)
-        assignments = validated_data.pop('assignments', None)
-        filter_words = validated_data.pop('filter_words', None)
-        attendance = validated_data.pop('attendance', None)
-        reminders = validated_data.pop('reminders', None)
-        classroom = Classroom(**validated_data)
-        classroom.save()
-        for item in students:
-            Student.objects.create(**item)
-
-    def update(self, instance, validated_data):
-        nested_serializer = self.fields['students']
-        nested_instance = instance.students
+    # def create(self, validated_data):
+    #     students = validated_data.pop('students', None)
+    #     assignments = validated_data.pop('assignments', None)
+    #     filter_words = validated_data.pop('filter_words', None)
+    #     attendance = validated_data.pop('attendance', None)
+    #     reminders = validated_data.pop('reminders', None)
+    #     classroom = Classroom(**validated_data)
+    #     classroom.save()
+    #     for item in students:
+    #         Student.objects.create(**item)
+    #
+    # def update(self, instance, validated_data):
+    #     nested_serializer = self.fields['students']
+    #     nested_instance = instance.students

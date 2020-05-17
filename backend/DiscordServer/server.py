@@ -25,7 +25,6 @@ from enum import Enum
 # all required roles that should be present at all times go here
 class Roles(Enum):
     TEACHER = "Teacher"
-    TA = "TA"
     STUDENT = "Student"
 
 
@@ -45,7 +44,7 @@ classroom_obj = None
 bot = commands.Bot(command_prefix="!")
 
 # state
-setup_flag = False
+setup_flag = {}
 
 attendance_flag = {}  # map from guild to bool
 attendance_heres = {}  # map from guild to list
@@ -92,9 +91,10 @@ async def getMembersOfRole(guild, role_name):
 
 
 @bot.command(name="setup")
+@commands.has_role('Admin')
 async def setup(ctx, *args):
     global setup_flag
-    setup_flag = True
+    setup_flag[ctx.guild] = True
 
     guild = ctx.guild
     await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
@@ -163,24 +163,23 @@ async def setup(ctx, *args):
 
 
 @bot.command(name='mute')
+@commands.has_role('Teacher')
 async def mute(ctx):
     for x in ctx.message.guild.members:
         if x in ctx.message.author.voice.channel.members:
             if x == ctx.message.author:
                 continue
             await x.edit(mute=True)
-    await ctx.send("Rans is the big dumb!")
-
 
 @bot.command(name='unmute')
+@commands.has_role('Teacher')
 async def unmute(ctx):
     for x in ctx.message.guild.members:
         if x in ctx.message.author.voice.channel.members:
             await x.edit(mute=False)
-    await ctx.send("Rans is the big dumb!")
-
 
 @bot.command(name='list')
+@commands.has_role('Teacher')
 async def list(ctx, *args):
     role = ""
     if len(args) != 0:
@@ -243,6 +242,7 @@ async def take_attendance(ctx, requested_time, requested_endtime):
 
 
 @bot.command(name='attendance')
+@commands.has_role('Teacher')
 async def attendance(ctx, *args):
     if len(args) == 0:
         requested_time = 60
@@ -262,6 +262,7 @@ async def attendance(ctx, *args):
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
 @bot.command(name='assignment')
+@commands.has_role('Teacher')
 async def assignment(ctx, *args):
     global assignments
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
@@ -280,6 +281,7 @@ async def assignment(ctx, *args):
     await ctx.send("An assignment has been created.")
 
 @bot.command(name='removeassignment')
+@commands.has_role('Teacher')
 async def removeassignment(ctx, *args):
     if len(args) == 0:
         await ctx.send("Requires an assignment name.")
@@ -327,6 +329,7 @@ async def currentassignments(ctx, *args):
     await ctx.send(text)
 
 @bot.command(name='submit')
+@commands.has_role('Student')
 async def submit(ctx, *args):
     if len(args) == 0:
         await ctx.send("You must provide an assignment name.")
@@ -357,6 +360,7 @@ async def submit(ctx, *args):
     pass
 
 @bot.command(name='getsubmissions')
+@commands.has_role('Teacher')
 async def getsubmissions(ctx, *args):
     if len(args) == 0:
         await ctx.send("Specify an assignment.")
@@ -427,6 +431,7 @@ async def currentreminders(ctx, *args):
 
 
 @bot.command(name='reminder')
+@commands.has_role('Teacher')
 async def reminder(ctx, *args):
     global credentials, reminders
     email = credentials[str(ctx.guild.name)]["email"]
@@ -501,6 +506,7 @@ async def removereminder(ctx, *args):
 
 
 @bot.command(name='group')
+@commands.has_role('Teacher')
 async def group(ctx, *args):
     global groups
 
@@ -561,41 +567,41 @@ async def group(ctx, *args):
         pass
 
 
-@bot.command(name='filter')
-# @commands.has_role('Teacher')
-async def filter(ctx, *args):
-    global swearWords
-    global credentials
-    email = credentials[str(ctx.guild.name)]["email"]
-    discord_name = credentials[str(ctx.guild.name)]["discord_name"]
-    print(args)
-
-    if (len(args) == 0):
-        response = '\n'.join(swearWords)
-    elif (args[0].lower() == "add"):
-        print("hello")
-        if (args[1] in swearWords):
-            response = "This word is already being filtered."
-        else:
-            url = 'http://34.125.57.52/add/word/'
-            headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
-                              auth=(user, password), headers=headers)
-            setSwearWordList(ctx.guild.name)
-            response = "This word has now been added to the filter."
-    elif (args[0].lower() == "remove"):
-        if (args[1] in swearWords):
-            url = 'http://34.125.57.52/remove/word/'
-            headers = {'content-type': 'application/json'}
-            x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
-                              auth=(user, password), headers=headers)
-            setSwearWordList(ctx.guild.name)
-            response = "This word has been removed from the filer."
-        else:
-            response = "This word is not part of the filter."
-
-
-    await ctx.send(response)
+# @bot.command(name='filter')
+# # @commands.has_role('Teacher')
+# async def filter(ctx, *args):
+#     global swearWords
+#     global credentials
+#     email = credentials[str(ctx.guild.name)]["email"]
+#     discord_name = credentials[str(ctx.guild.name)]["discord_name"]
+#     print(args)
+#
+#     if (len(args) == 0):
+#         response = '\n'.join(swearWords)
+#     elif (args[0].lower() == "add"):
+#         print("hello")
+#         if (args[1] in swearWords):
+#             response = "This word is already being filtered."
+#         else:
+#             url = 'http://34.125.57.52/add/word/'
+#             headers = {'content-type': 'application/json'}
+#             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
+#                               auth=(user, password), headers=headers)
+#             setSwearWordList(ctx.guild.name)
+#             response = "This word has now been added to the filter."
+#     elif (args[0].lower() == "remove"):
+#         if (args[1] in swearWords):
+#             url = 'http://34.125.57.52/remove/word/'
+#             headers = {'content-type': 'application/json'}
+#             x = requests.post(url, json={"discord_name": discord_name, "email": email, "word": {"word": args[1]}},
+#                               auth=(user, password), headers=headers)
+#             setSwearWordList(ctx.guild.name)
+#             response = "This word has been removed from the filer."
+#         else:
+#             response = "This word is not part of the filter."
+#
+#
+#     await ctx.send(response)
 
 
 # @bot.event
@@ -673,7 +679,7 @@ async def on_message(message):
     if len(message.attachments) > 0:
         await processsubmission(bot, message)
 
-    if not setup_flag:
+    if message.guild not in setup_flag or not setup_flag[message.guild]:
         if message.content[0] == '!':
             if message.content.split(" ")[0] != "!setup":
                 await message.channel.send("This bot neets setting up. Use \n!setup email")
