@@ -1,230 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83ca2b89-b041-4402-b7c7-4371d065f9ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/sb-admin-angular-master/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/sb-admin-angular-master/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/sb-admin-angular-master/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/sb-admin-angular-master/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/404.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/500.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/Readme.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/advanced_form_components.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/advanced_table.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/basic_table.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/blank.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/buttons.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/calendar.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/chartjs.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/chat_room.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/contactform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/contactform/Readme.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/contactform/contactform.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/credits.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/css/style-responsive.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/css/table-responsive.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/css/to-do.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/css/zabuto_calendar.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/dropzone.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/faq.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/file_upload.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/flot_chart.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/font_awesome.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/form_component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/form_validation.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/gallery.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/general.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/google_maps.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/grids.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/404.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/500.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/apple-touch-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/blog-bg.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/checkbox-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-02.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-03.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-04.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-05.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-06.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-07.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-08.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-09.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/friends/fr-11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/instagram.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/login-bg.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/lorde.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/mask.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/ny.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/portfolio/port01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/portfolio/port02.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/portfolio/port03.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/portfolio/port04.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/portfolio/port05.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/portfolio/port06.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/product.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/profile-01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/profile-02.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/radio-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/ui-danro.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/ui-divya.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/ui-sam.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/ui-sherman.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/ui-zac.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/weather.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/img/zoom.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/inbox.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/index - Copy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/inline_editor.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/invoice.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/css/DT_bootstrap.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/css/demo_page.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/css/demo_table.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/css/demo_table_jui.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/css/jquery.dataTables.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/css/jquery.dataTables_themeroller.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/Sorting icons.psd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/back_disabled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/back_enabled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/back_enabled_hover.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/details_close.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/details_open.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/forward_disabled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/forward_enabled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/forward_enabled_hover.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/sort_asc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/sort_asc_disabled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/sort_both.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/sort_desc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/images/sort_desc_disabled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/js/DT_bootstrap.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/js/jquery.dataTables.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/js/jquery.dataTables.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-datatable/js/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/advanced-form-components.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-datepicker/css/datepicker.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-datepicker/js/bootstrap-datepicker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-daterangepicker/date.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-daterangepicker/daterangepicker-bs3.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-daterangepicker/daterangepicker.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-daterangepicker/daterangepicker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-daterangepicker/moment.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-datetimepicker/css/datetimepicker.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-fileupload/bootstrap-fileupload.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-fileupload/bootstrap-fileupload.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-inputmask/bootstrap-inputmask.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-switch.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-timepicker/compiled/timepicker.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-timepicker/js/bootstrap-timepicker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-wysihtml5/bootstrap-wysihtml5.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-wysihtml5/bootstrap-wysihtml5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap-wysihtml5/wysihtml5-0.3.0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/css/bootstrap.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/css/bootstrap.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/fonts/glyphicons-halflings-regular.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/fonts/glyphicons-halflings-regular.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/fonts/glyphicons-halflings-regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/fonts/glyphicons-halflings-regular.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/fonts/glyphicons-halflings-regular.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/js/bootstrap.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/bootstrap/js/bootstrap.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/calendar-conf-events.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/chart-master/Chart.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/chartjs-conf.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/ckeditor/ckeditor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/common-scripts.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/dropzone/css/dropzone.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/dropzone/dropzone.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/dropzone/images/spritemap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/dropzone/images/spritemap@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/easy-pie-chart.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/fancybox/jquery.fancybox.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/fancybox/jquery.fancybox.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/css/jquery.fileupload-noscript.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/css/jquery.fileupload-ui-noscript.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/css/jquery.fileupload-ui.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/css/jquery.fileupload.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/img/loading.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/img/progressbar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/cors/jquery.xdr-transport.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload-audio.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload-image.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload-process.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload-ui.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload-validate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload-video.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.fileupload.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/jquery.iframe-transport.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/file-uploader/js/vendor/jquery.ui.widget.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/flot/jquery.flot.crosshair.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/flot/jquery.flot.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/flot/jquery.flot.pie.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/flot/jquery.flot.resize.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/flot/jquery.flot.stack.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/flotchart-conf.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/css/font-awesome.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/css/font-awesome.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/fonts/FontAwesome.otf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/fonts/fontawesome-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/fonts/fontawesome-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/fonts/fontawesome-webfont.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/fonts/fontawesome-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/font-awesome/fonts/fontawesome-webfont.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/form-component.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/form-validation-script.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/fullcalendar/bootstrap-fullcalendar.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/fullcalendar/fullcalendar.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/google-maps/data/points.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/google-maps/maplace.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter-conf.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/css/jquery.gritter.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/css/jquery.gritter0.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/images/gritter-light.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/images/gritter-long.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/images/gritter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/images/ie-spacer.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/gritter/js/jquery.gritter.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery-easy-pie-chart/jquery.easy-pie-chart.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery-easy-pie-chart/jquery.easy-pie-chart.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery-ui-1.9.2.custom.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.backstretch.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.dcjqaccordion.2.7.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.nicescroll.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.scrollTo.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.sparkline.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.tagsinput.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery.ui.touch-punch.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/jquery/jquery.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/morris-conf.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/morris/morris.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/php-mail-form/validate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/raphael/raphael.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/sparkline-chart.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/tasks.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/xchart/d3.v3.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/xchart/xcharts.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/xchart/xcharts.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lib/zabuto_calendar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lobby.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/lock_screen.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/mail_compose.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/mail_view.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/morris.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/panels.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/pricing_table.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/profile.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/responsive_table.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/todo_list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/takeTwo/xchart.html" beforeDir="false" />
-    </list>
+    <list default="true" id="83ca2b89-b041-4402-b7c7-4371d065f9ee" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -310,17 +87,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backend/teachingassistant/manage.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
+            <state>
+              <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/teachingassistant/WebApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="446" column="44" selection-start-line="446" selection-start-column="44" selection-end-line="447" selection-end-column="91" />
+            <state relative-caret-position="-119">
+              <caret line="251" column="45" lean-forward="true" selection-start-line="251" selection-start-column="45" selection-end-line="251" selection-end-column="45" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
                 <marker date="1589677937817" expanded="true" signature="19023:19615" ph="..." />
@@ -342,11 +119,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backend/DiscordServer/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="617" column="51" selection-start-line="617" selection-start-column="51" selection-end-line="617" selection-end-column="51" />
+            <state relative-caret-position="133">
+              <caret line="609" column="19" lean-forward="true" selection-start-line="609" selection-start-column="19" selection-end-line="609" selection-end-column="39" />
               <folding>
                 <element signature="e#9#18#0" expanded="true" />
                 <marker date="1589683776868" expanded="true" signature="20337:20338" ph="..." />
@@ -386,15 +163,23 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/frontend/AngularJSApp/node_modules" />
     <handled-path value="$PROJECT_DIR$/frontend/sb-admin-angular-master/node_modules" />
+    <handled-path value="$PROJECT_DIR$/frontend/takeTwo/teacher/node_modules" />
   </component>
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
+      <path value="$PROJECT_DIR$/frontend/AngularJSApp/package.json" />
+      <path value="$PROJECT_DIR$/frontend/AngularJSApp/public/html/bootstrap/package.json" />
+      <path value="$PROJECT_DIR$/frontend/AngularJSApp/public/plugins/bower_components/chartist-plugin-tooltip-master/package.json" />
+      <path value="$PROJECT_DIR$/frontend/AngularJSApp/public/plugins/bower_components/morrisjs/package.json" />
+      <path value="$PROJECT_DIR$/frontend/AngularJSApp/public/plugins/bower_components/sidebar-nav/package.json" />
       <path value="$PROJECT_DIR$/frontend/sb-admin-angular-master/package.json" />
-      <path value="$PROJECT_DIR$/frontend/takeTwo/html/bootstrap/package.json" />
-      <path value="$PROJECT_DIR$/frontend/takeTwo/plugins/bower_components/chartist-plugin-tooltip-master/package.json" />
-      <path value="$PROJECT_DIR$/frontend/takeTwo/plugins/bower_components/morrisjs/package.json" />
-      <path value="$PROJECT_DIR$/frontend/takeTwo/plugins/bower_components/sidebar-nav/package.json" />
+      <path value="$PROJECT_DIR$/frontend/takeTwo/teacher/package.json" />
+      <path value="$PROJECT_DIR$/frontend/takeTwo/teacher/src/app/bootstrap/package.json" />
+      <path value="$PROJECT_DIR$/frontend/takeTwo/teacher/src/app/plugins/bower_components/chartist-plugin-tooltip-master/package.json" />
+      <path value="$PROJECT_DIR$/frontend/takeTwo/teacher/src/app/plugins/bower_components/morrisjs/package.json" />
+      <path value="$PROJECT_DIR$/frontend/takeTwo/teacher/src/app/plugins/bower_components/sidebar-nav/package.json" />
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -569,6 +354,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25302014" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -650,16 +436,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/teachingassistant/WebApp/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/teachingassistant/WebApp/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -670,33 +446,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/teachingassistant/manage.py">
+    <entry file="file://$PROJECT_DIR$/backend/teachingassistant/WebApp/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/teachingassistant/WebApp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="446" column="44" selection-start-line="446" selection-start-column="44" selection-end-line="447" selection-end-column="91" />
+        <state relative-caret-position="323">
+          <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <marker date="1589677937817" expanded="true" signature="19023:19615" ph="..." />
-            <marker date="1589677937817" expanded="true" signature="19644:19645" ph="..." />
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/DiscordServer/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="617" column="51" selection-start-line="617" selection-start-column="51" selection-end-line="617" selection-end-column="51" />
+        <state relative-caret-position="133">
+          <caret line="609" column="19" lean-forward="true" selection-start-line="609" selection-start-column="19" selection-end-line="609" selection-end-column="39" />
           <folding>
             <element signature="e#9#18#0" expanded="true" />
             <marker date="1589683776868" expanded="true" signature="20337:20338" ph="..." />
             <marker date="1589683776868" expanded="true" signature="20485:21487" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/teachingassistant/manage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/teachingassistant/WebApp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-119">
+          <caret line="251" column="45" lean-forward="true" selection-start-line="251" selection-start-column="45" selection-end-line="251" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <marker date="1589677937817" expanded="true" signature="19023:19615" ph="..." />
+            <marker date="1589677937817" expanded="true" signature="19644:19645" ph="..." />
           </folding>
         </state>
       </provider>
