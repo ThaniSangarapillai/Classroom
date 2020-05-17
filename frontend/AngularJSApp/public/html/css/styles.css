@@ -1,15 +1,22 @@
-td {
+/* td {
     text-align: center;
-}
+} */
 
 td input[type=text] {
     text-align: center;
     padding: 10px;
     border-radius: 10px;
+    box-shadow: none;
+    border-style: solid;
 }
+
 
 .deleteButton {
     border-radius: 5px;
+    box-shadow: none;
+    border-style: solid;
+    width: 80px;
+    height: 30px;
 }
 
 tbody tr:nth-child(odd) {
@@ -21,13 +28,13 @@ tbody tr:nth-child(odd) {
 }
 
 .left {
-    width: 30%;
+    width: 20%;
     text-align: left;
     margin-left: 20px;
 }
 
 .right {
-    width: 30%;
+    width: 20%;
     text-align: right;
     margin-right: 20px;
 }
