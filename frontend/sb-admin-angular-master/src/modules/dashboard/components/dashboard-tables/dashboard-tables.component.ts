@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { DashboardService } from '@modules/dashboard/services/dashboard.service';
 
 @Component({
     selector: 'sb-dashboard-tables',
@@ -7,11 +8,9 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     styleUrls: ['dashboard-tables.component.scss'],
 })
 export class DashboardTablesComponent implements OnInit {
-    constructor() {}
-    ngOnInit() {}
-
-    // hide() {
-    //     const table = document.getElementById('dashTable') as HTMLFormElement;
-    //     table.hidden = true;
-    // }
+    constructor(private dashboard: DashboardService) {}
+    ngOnInit() {
+        const table = document.getElementById('dashTable') as HTMLFormElement;
+        this.dashboard.hide_tables_store(table);
+    }
 }
