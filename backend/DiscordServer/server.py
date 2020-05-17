@@ -45,6 +45,8 @@ classroom_obj = None
 bot = commands.Bot(command_prefix="!")
 
 # state
+setup_flag = False
+
 attendance_flag = {}  # map from guild to bool
 attendance_heres = {}  # map from guild to list
 
@@ -91,6 +93,9 @@ async def getMembersOfRole(guild, role_name):
 
 @bot.command(name="setup")
 async def setup(ctx, *args):
+    global setup_flag
+    setup_flag = True
+
     guild = ctx.guild
     await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
     await getRole(guild, Roles.TEACHER.value, 0xff4af9)
@@ -608,6 +613,20 @@ async def processsubmission(bot, message):
     else:
         (target_guild, target_assignment) = assignment_submission_focus[message.author]
 
+    try:
+        duedatetime = assignments[target_guild][target_assignment]
+    except:
+        await message.channel.send("Something went wrong")
+        return
+
+    currentdatetime = datetime.datetime.now()
+    print(currentdatetime, duedatetime)
+
+    if duedatetime < currentdatetime:
+        print("already due!")
+        await message.channel.send(target_assignment + " is already due. Shame on you!")
+        return
+
     if not os.path.exists(str('assignments')):
         os.makedirs('assignments')
 
@@ -654,6 +673,12 @@ async def on_message(message):
     if len(message.attachments) > 0:
         await processsubmission(bot, message)
 
+    if not setup_flag:
+        if message.content[0] == '!':
+            if message.content.split(" ")[0] != "!setup":
+                await message.channel.send("This bot neets setting up. Use \n!setup email")
+                return
+
     try:
         await bot.process_commands(message)
     except:
@@ -696,6 +721,7 @@ async def once_a_second():
     currentdatetime = datetime.datetime.now()
 
     for guild in reminders:
+        # reminders
         remove_reminders = []
 
         for reminder in reminders[guild]:
@@ -708,7 +734,6 @@ async def once_a_second():
                 await channel.send(message)
 
         reminders[guild] = [r for r in reminders[guild] if r not in remove_reminders]
-
 
 
 @once_a_second.before_loop
