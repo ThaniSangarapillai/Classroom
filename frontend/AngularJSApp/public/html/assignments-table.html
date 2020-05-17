@@ -15,7 +15,7 @@
 <!-- ============================================================== -->
 <!-- Page Content -->
 <!-- ============================================================== -->
-<div id="page-wrapper" ng-controller="assignmentController">
+<div id="page-wrapper" ng-controller="assignmentsController">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -52,10 +52,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in reminders">
+                                <tr ng-repeat="x in assignments">
                                     <td><p>{{ $index }}</p></td>
-                                    <td><p ng-show="!buttonHide">{{ x.text }}</p><input ng-show="buttonHide" type="text" ng-model="x.text"></td>
-                                    <td><p ng-show="!buttonHide">{{ x.date_time }}</p><input ng-show="buttonHide" type="text" ng-model="x.date_time"></td>
+                                    <td><p ng-show="!buttonHide">{{ x.name }}</p><input ng-show="buttonHide" type="text" ng-model="x.name"></td>
+                                    <td><p ng-show="!buttonHide">{{ x.duedate }}</p><input ng-show="buttonHide" type="text" ng-model="x.duedate"></td>
                                     <td><button class="deleteButton" ng-click="buttonHide=true" ng-show="!buttonHide">Modify</button><button class="deleteButton" ng-click="modify(x.text, x.date_time, $index)" ng-show="buttonHide">Set</button></td>
                                     <td><button class="deleteButton" ng-click="delete($index)">Delete</button></td>  
                                 </tr>

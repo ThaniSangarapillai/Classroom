@@ -324,16 +324,14 @@ app.controller('remindersController', ['$scope', '$http', '$location', function 
     $scope.update();
 }]);
 
-app.controller('remindersController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-    console.log("hi");
-
-    $scope.reminders = []
+app.controller('assignmentsController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    $scope.assignments = []
     $scope.student = {'name':'', 'discord_name':''}
 
     $scope.update = function () {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/reminders/",
+            url: "http://34.125.57.52/assignments/",
             data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
             headers: {
                 "Content-Type": "application/json"
@@ -342,11 +340,11 @@ app.controller('remindersController', ['$scope', '$http', '$location', function 
             .then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
-                    reminders = response.data
-                    $scope.reminders = []
-                    for (let x in reminders) {
+                    assignments = response.data
+                    $scope.assignments = []
+                    for (let x in assignments) {
                         console.log(x)
-                        $scope.reminders.push({"text":reminders[x].text, "date_time": reminders[x].date_time.replace("T", " ").replace("Z","")})
+                        $scope.assignments.push({"name":assignments[x].text, "duedate": assignments[x].date_time.replace("T", " ").replace("Z","")})
                     }
                 } else {
 
@@ -361,7 +359,7 @@ app.controller('remindersController', ['$scope', '$http', '$location', function 
     $scope.delete = function (indice) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/remove/reminder/",
+            url: "http://34.125.57.52/remove/assignments/",
             data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "pk": indice },
             headers: {
                 "Content-Type": "application/json"
@@ -381,7 +379,7 @@ app.controller('remindersController', ['$scope', '$http', '$location', function 
     $scope.modify = function (text, date_time, indice) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/modify/reminder/",
+            url: "http://34.125.57.52/modify/assignments/",
             data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "reminder":{"pk": indice, "text":text, "date_time":date_time }},
             headers: {
                 "Content-Type": "application/json"
@@ -402,7 +400,7 @@ app.controller('remindersController', ['$scope', '$http', '$location', function 
     $scope.add = function (text, date_time) {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/add/reminder/",
+            url: "http://34.125.57.52/add/assignments/",
             data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "reminder":{"text":text, "date_time":date_time } },
             headers: {
                 "Content-Type": "application/json"
