@@ -610,10 +610,10 @@ async def group(ctx, *args):
 #     await ctx.send(response)
 
 
-# @bot.event
-# async def on_command_error(ctx, error):
-#     if isinstance(error, commands.errors.CheckFailure):
-#         await ctx.send("Sorry, only the teacher can use that command.\n¯\_(ツ)_/¯")
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.errors.CheckFailure):
+        await ctx.send("Sorry, you don't have the right role to use this function.\n¯\_(ツ)_/¯")
 
 async def processsubmission(bot, message):
     # try:
