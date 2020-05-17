@@ -7,11 +7,11 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     styleUrls: ['dashboard-tables.component.scss'],
 })
 export class DashboardTablesComponent implements OnInit {
-    constructor(private _https: HttpClient) {}
+    constructor() {}
     ngOnInit() {}
 
-    hide() {
-        const table = document.getElementById('dashTable') as HTMLFormElement;
-        table.hidden = true;
-    }
+    // hide() {
+    //     const table = document.getElementById('dashTable') as HTMLFormElement;
+    //     table.hidden = true;
+    // }
 }
