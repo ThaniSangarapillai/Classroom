@@ -25,6 +25,10 @@ app.config(function ($routeProvider) {
             templateUrl: "/html/word-table.html",
             controller: "wordController",
         })
+        .when("/attendance", {
+            templateUrl: "/html/attendance.html",
+            controller: "attendanceController",
+        })
 
         .when("/reminders", {
             templateUrl: "/html/reminders-table.html",
@@ -124,10 +128,6 @@ app.controller('wordController', ['$scope', '$http', '$location', function ($sco
                 console.log(response);
                 if (response.status === 200) {
                     $scope.words = response.data
-                    console.log(response.data)
-                } else {
-
-                    console.log("ohno!")
                 }
             });
     };
@@ -170,11 +170,18 @@ app.controller('wordController', ['$scope', '$http', '$location', function ($sco
     $scope.update();
 }]);
 
-app.controller('profileController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+app.controller('homeController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    
+}]);
+
+app.controller('attendanceController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    $scope.students = []
+    $scope.student = {}
+
     $scope.update = function () {
         $http({
             method: 'POST',
-            url: "http://34.125.57.52/filterwords/",
+            url: "http://34.125.57.52/attendance/",
             data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com" },
             headers: {
                 "Content-Type": "application/json"
@@ -183,11 +190,34 @@ app.controller('profileController', ['$scope', '$http', '$location', function ($
             .then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
-                    $scope.words = response.data
+                    $scope.students = response.data
                     console.log(response.data)
+                } else {
+
+                    console.log("ohno!")
                 }
             });
     };
+
+    $scope.delete = function (name, discord) {
+        $http({
+            method: 'POST',
+            url: "http://34.125.57.52/remove/student/",
+            data: { 'discord_name': "Thani#4847", "email": "thanigajan@gmail.com", "student": { "name": name, "discord_name": discord } },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    console.log("woo!")
+                } else {
+
+                    console.log("ohno!")
+                }
+            })
+    }
 
     $scope.update();
 }]);

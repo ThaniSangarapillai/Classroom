@@ -25,7 +25,6 @@ from enum import Enum
 # all required roles that should be present at all times go here
 class Roles(Enum):
     TEACHER = "Teacher"
-    TA = "TA"
     STUDENT = "Student"
 
 
@@ -92,6 +91,7 @@ async def getMembersOfRole(guild, role_name):
 
 
 @bot.command(name="setup")
+@commands.has_role('Admin')
 async def setup(ctx, *args):
     global setup_flag
     setup_flag[ctx.guild] = True
@@ -163,24 +163,23 @@ async def setup(ctx, *args):
 
 
 @bot.command(name='mute')
+@commands.has_role('Teacher')
 async def mute(ctx):
     for x in ctx.message.guild.members:
         if x in ctx.message.author.voice.channel.members:
             if x == ctx.message.author:
                 continue
             await x.edit(mute=True)
-    await ctx.send("Rans is the big dumb!")
-
 
 @bot.command(name='unmute')
+@commands.has_role('Teacher')
 async def unmute(ctx):
     for x in ctx.message.guild.members:
         if x in ctx.message.author.voice.channel.members:
             await x.edit(mute=False)
-    await ctx.send("Rans is the big dumb!")
-
 
 @bot.command(name='list')
+@commands.has_role('Teacher')
 async def list(ctx, *args):
     role = ""
     if len(args) != 0:
@@ -243,6 +242,7 @@ async def take_attendance(ctx, requested_time, requested_endtime):
 
 
 @bot.command(name='attendance')
+@commands.has_role('Teacher')
 async def attendance(ctx, *args):
     if len(args) == 0:
         requested_time = 60
@@ -262,6 +262,7 @@ async def attendance(ctx, *args):
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
 @bot.command(name='assignment')
+@commands.has_role('Teacher')
 async def assignment(ctx, *args):
     global assignments
     time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
@@ -280,6 +281,7 @@ async def assignment(ctx, *args):
     await ctx.send("An assignment has been created.")
 
 @bot.command(name='removeassignment')
+@commands.has_role('Teacher')
 async def removeassignment(ctx, *args):
     if len(args) == 0:
         await ctx.send("Requires an assignment name.")
@@ -327,6 +329,7 @@ async def currentassignments(ctx, *args):
     await ctx.send(text)
 
 @bot.command(name='submit')
+@commands.has_role('Student')
 async def submit(ctx, *args):
     if len(args) == 0:
         await ctx.send("You must provide an assignment name.")
@@ -357,6 +360,7 @@ async def submit(ctx, *args):
     pass
 
 @bot.command(name='getsubmissions')
+@commands.has_role('Teacher')
 async def getsubmissions(ctx, *args):
     if len(args) == 0:
         await ctx.send("Specify an assignment.")
@@ -427,6 +431,7 @@ async def currentreminders(ctx, *args):
 
 
 @bot.command(name='reminder')
+@commands.has_role('Teacher')
 async def reminder(ctx, *args):
     global credentials, reminders
     email = credentials[str(ctx.guild.name)]["email"]
@@ -501,6 +506,7 @@ async def removereminder(ctx, *args):
 
 
 @bot.command(name='group')
+@commands.has_role('Teacher')
 async def group(ctx, *args):
     global groups
 
