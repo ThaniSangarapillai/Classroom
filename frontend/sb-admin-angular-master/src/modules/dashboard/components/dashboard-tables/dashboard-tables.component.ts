@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DashboardService } from '@modules/dashboard/services/dashboard.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'sb-dashboard-tables',
