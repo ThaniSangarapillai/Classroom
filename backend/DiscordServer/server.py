@@ -38,11 +38,13 @@ password = "X7Mz&&am:&dOhnhk|Oq0$W^MYgkD3V|jgp/1*7{5=I4QLC:HFpC&P+FgL>A*w-F"
 user = "TeachingAssistant"
 classroom_obj = None
 
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix=">>")
 
 # state
 attendance_flag = {}  # map from guild to bool
 attendance_heres = {}  # map from guild to list
+
+assignments = {}
 
 reminders = {}
 
@@ -249,7 +251,46 @@ async def attendance(ctx, *args):
 
     bot.loop.create_task(take_attendance(ctx, requested_time, attendance_endtime))
 
+@bot.command(name='assignment')
+async def assignment(ctx, *args):
+    global assignments
+    time = datetime.datetime.strptime(args[0] + " " + args[1], "%d/%m/%Y %H:%M:%S")
+    print(time)
+    assignment_name = args[2]
 
+    if ctx.guild in assignments:
+        guildassignments = assignments[ctx.guild]
+    else:
+        assignments[ctx.guild] = {}
+        guildassignments = assignments[ctx.guild]
+
+    guildassignments[assignment_name] = time
+
+    print(assignments)
+    await ctx.send("An assignment has been created.")
+
+@bot.command(name='currentassignments')
+async def currentassignments(ctx, *args):
+    global assignment
+
+    if ctx.guild in assignments:
+        guildassignments = assignments[ctx.guild]
+    else:
+        return
+
+    text = ""
+    for assignment in guildassignments:
+        text += str(assignment) + ", due " + str(guildassignments[assignment]) + "\n"
+
+    print(text)
+    await ctx.send(text)
+
+@bot.command(name='submit')
+async def submit(ctx, *args):
+    currentdatetime = datetime.datetime.now()
+    dm_channel = await ctx.author.create_dm()
+    await dm_channel.send("how dare you send a command.")
+    pass
 
 async def clean_reminders(ctx):
     global credentials
@@ -278,20 +319,21 @@ async def refresh_reminders(ctx):
 
 @bot.command(name="currentreminders")
 async def currentreminders(ctx, *args):
+    await refresh_reminders(ctx)
+    await clean_reminders(ctx)
     text = ""
     i = 0
     print(reminders)
+
 
     if ctx.guild not in reminders:
         await ctx.send("There are no reminders.")
         return
 
-    guild_reminders = reminders[ctx.guild]
-    print(guild_reminders)
-    for reminder in guild_reminders:
-        (datetime, message) = reminder
+    for reminder in reminders[str(ctx.guild.name)]:
+        (date, message) = reminder
         text += str(i) + ":"
-        text += " " + str(datetime)
+        text += " " + str(datetime.datetime.strftime(datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), '%d/%m/%Y %H:%M:%S'))
         text += " " + "\"" + message + "\""
         text += "\n"
         i += 1
@@ -316,11 +358,12 @@ async def reminder(ctx, *args):
                       auth=(user, password), headers=headers)
 
     if x.status_code == 200:
-        global reminders
-        if ctx.guild in reminders:
-            reminders[ctx.guild] += [(time, args[2])]
-        else:
-            reminders[ctx.guild] = [(time, args[2])]
+        await refresh_reminders(ctx)
+        await clean_reminders(ctx)
+        # if ctx.guild in reminders:
+        #     reminders[ctx.guild] += [(time, args[2])]
+        # else:
+        #     reminders[ctx.guild] = [(time, args[2])]
         await ctx.send("A reminder has been added.")
     else:
         await ctx.send("Error.")
@@ -344,11 +387,11 @@ async def removereminder(ctx, *args):
     try:
         index = int(args[0])
         global reminders
-        guildreminders = reminders[ctx.guild]
+        guildreminders = reminders[str(ctx.guild.name)]
         toremove = guildreminders[index]
 
 
-        (datetime, message) = toremove
+        (date, message) = toremove
 
         url = 'http://34.125.57.52/remove/reminder/'
         headers = {'content-type': 'application/json'}
@@ -361,7 +404,7 @@ async def removereminder(ctx, *args):
 
         guildreminders.pop(index)
         text = str(index) + ":"
-        text += " " + str(datetime)
+        text += " " + str(datetime.datetime.strftime(datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), '%d/%m/%Y %H:%M:%S'))
         text += " " + "\"" + message + "\""
         text += "\n"
         print("REMOVED " + text)
@@ -369,7 +412,7 @@ async def removereminder(ctx, *args):
     except:
         usage_text = "Usage:\n!removereminder index"
         await ctx.send(usage_text)
-        return
+
 
 
 @bot.command(name='group')
@@ -553,10 +596,37 @@ async def once_a_second():
         reminders[guild] = [r for r in reminders[guild] if r not in remove_reminders]
 
 
+
 @once_a_second.before_loop
 async def before_once_a_second():
     await bot.wait_until_ready()
 
+@tasks.loop(seconds=60)
+async def reminderrefresh():
+    global credentials
+    print("_______EXECUTING____________")
+    if credentials != {}:
+        for z, s in credentials.items():
+            url = 'http://34.125.57.52/reminders/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": s.discord_name, "email": s.email},
+                              auth=(user, password), headers=headers)
+
+            reminders[z] = []
+            if x.status_code == 200:
+                for y in x.json():
+                    (datetime, message) = y.values()
+                    reminders[z].append((datetime, message))
+
+            url = 'http://34.125.57.52/remove/reminders/'
+            headers = {'content-type': 'application/json'}
+            x = requests.post(url, json={"discord_name": s.discord_name, "email": s.email},
+                              auth=(user, password), headers=headers)
+
+# @refresh_reminders.before_loop
+# async def before_refresh():
+#     await bot.wait_until_ready()
 
 once_a_second.start()
+reminderrefresh.start()
 bot.run(TOKEN)
