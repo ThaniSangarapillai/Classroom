@@ -34,6 +34,7 @@ app.controller('studentController', ['$scope', '$http', '$location', function ($
     console.log("hi");
 
     $scope.students = []
+    $scope.student = {}
 
     $scope.update = function () {
         $http({
