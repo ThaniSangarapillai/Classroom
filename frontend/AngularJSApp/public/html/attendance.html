@@ -19,17 +19,12 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Basic Table</h4>
+                <h4 class="page-title">Attendance</h4>
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
-                    class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade
-                    to Pro
-
-                </a>
                 <ol class="breadcrumb">
                     <li><a href="#">Dashboard</a></li>
-                    <li class="active">Basic Table</li>
+                    <li class="active">Attendance</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -38,30 +33,45 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
-                    <h3 class="box-title">Basic Table</h3>
+                    <h3 class="box-title">Attendance List</h3>
                     <!-- <p class="text-muted">Add class <code>.table</code></p> -->
                     <div class="table-responsive">
-                        <table class="table" style="width: 95%;">
+                        <table class="table" style="width: 97%;">
                             <thead>
                                 <tr>
                                     <th class="left">#</th>
-                                    <th colspan="2">Date</th>
-                                    <th class="right">Student Present</th>
-                                    
+                                    <th colspan="1">Date</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="right"></th>
+
                                 </tr>
                             </thead>
-                            <tbody ng-repeat="x in attendance">
+                            <tbody ng-repeat="x in attendances">
                                 <tr class="tabledarker">
                                     <td class="left">{{ $index }}</td>
-                                    <td colspan="2">{{ x.day }}</td>
+                                    <td colspan="1">{{ x.day }}</td>
+                                    <td></td>
+                                    <td></td>
                                     <!-- <td>{{ x.student_list }}</td> -->
-                                    <td class="right"><img src="images/551749-200.png" style="width: 3%;height: auto;" ng-click="drop=!drop"></td>
+                                    <td class="right" ng-click="drop=!drop"><img src="images/551749-200.png" style="width: 5%;height: auto;"></td>
+                                </tr>
+                                <tr ng-show="drop">
+                                    <th class="left"></th>
+                                    <th></th>
+                                    <th >Name</th>
+                                    <th colspan="1">Discord Name</th>
+                                    <th class="right">Student Present</th>
+
                                 </tr>
                                 <tr ng-repeat="y in x.student_list" ng-show="drop">
-                                    <td class="left">{{ y.name }}</td>
-                                    <td colspan="2">{{ y.discord_name }}</td>
+                                    <td class="left"></td>
+                                    <td></td>
+                                    <td>{{ y.name }}</td>
+                                    <td colspan="">{{ y.discord_name }}</td>
+                                    
                                     <!-- <td>{{ x.student_list }}</td> -->
-                                    <td class="right"><input type="checkbox" ng-checked="y.presence"></td>
+                                    <td class="right"><input type="checkbox" readonly ng-checked="y.presence"></td>
                                 </tr>
                                 <!-- <tr>
                                     <td></td>
@@ -70,7 +80,13 @@
                                     <td></td>
                                     <td><button ng-click="add()">Add</button></td>
                                 </tr> -->
+                                
                             </tbody>
+                            <!-- <tbody>
+                                <tr>
+                                    <td><button ng-click="add()">Take Attendance</button></td>
+                                </tr>
+                            </tbody> -->
                         </table>
                     </div>
                 </div>
