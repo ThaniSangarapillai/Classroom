@@ -45,7 +45,7 @@ classroom_obj = None
 bot = commands.Bot(command_prefix="!")
 
 # state
-setup_flag = False
+setup_flag = {}
 
 attendance_flag = {}  # map from guild to bool
 attendance_heres = {}  # map from guild to list
@@ -94,7 +94,7 @@ async def getMembersOfRole(guild, role_name):
 @bot.command(name="setup")
 async def setup(ctx, *args):
     global setup_flag
-    setup_flag = True
+    setup_flag[ctx.guild] = True
 
     guild = ctx.guild
     await getRole(guild, Roles.STUDENT.value, 0x1fff7c)
@@ -673,7 +673,7 @@ async def on_message(message):
     if len(message.attachments) > 0:
         await processsubmission(bot, message)
 
-    if not setup_flag:
+    if message.guild not in setup_flag or not setup_flag[message.guild]:
         if message.content[0] == '!':
             if message.content.split(" ")[0] != "!setup":
                 await message.channel.send("This bot neets setting up. Use \n!setup email")
