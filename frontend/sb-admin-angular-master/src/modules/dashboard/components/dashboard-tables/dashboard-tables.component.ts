@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
     styleUrls: ['dashboard-tables.component.scss'],
 })
 export class DashboardTablesComponent implements OnInit {
-    constructor(private _https: HttpClient) {}
+    constructor() {}
     ngOnInit() {}
 
     // hide() {
